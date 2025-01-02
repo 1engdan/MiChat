@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "michatapi"
+version = "0.1.0"
+description = ""
+authors = ["1engdan <btw1engdan@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = "^0.115.6"
+uvicorn = "^0.34.0"
+requests = "^2.32.3"
+bcrypt = "^4.2.1"
+sqlalchemy = "^2.0.36"
+pyjwt = "^2.10.1"
+pydantic-settings = "^2.7.0"
+alembic = "^1.14.0"
+asyncpg = "^0.30.0"
+greenlet = "^3.1.1"
+yarl = "^1.18.3"
+pydantic = {extras = ["email"], version = "^2.10.4"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

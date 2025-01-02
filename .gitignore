@@ -1,0 +1,14 @@
+.env
+.vs
+.idea
+
+node_modules/
+logs/
+__pycache__/
+.vscode/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+nohup.out
