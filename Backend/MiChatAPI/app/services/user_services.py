@@ -1,35 +1,63 @@
-from app.cfg.settings import settings
-from app.database import database
-from app.schemas.account import users
+from typing import List, Sequence
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database.models import models
-import bcrypt
-from sqlalchemy import (
-select,
-update,
-delete,
-insert
-)
 
-def create_db():
-  return database.Base.metadata.create_all(bind=database.get_engine())
+from app.database.models.models import User
+from app.database.repository.user_repository import UserRepository
 
-async def get_db():
-    async with database.get_session() as session:
-        yield session
+from app.schemas.get_access import authorize, register
 
-async def get_user_by_email(email: str, session: AsyncSession):
-  result = await session.execute(select(models.User).where(models.User.email == email))
-  return result.scalar_one_or_none()
+from app.utils.result import Result, err, success
 
-async def get_user_by_username(username: str, session: AsyncSession):
-  result = await session.execute(select(models.User).where(models.User.username == username))
-  return result.scalar_one_or_none()
+from app.security.hasher import hash_password, verify_password
 
-async def create_user(user: users.UserCreate, session: AsyncSession):
-  hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
-  user_obj = models.User(email=user.email, username=user.username, password=hashed_password.decode('utf-8'))
-  session.add(user_obj)
-  session.commit()
-  session.refresh(user_obj)
-  return user_obj
+from app.security.jwtmanager import JWTManager
+from app.security.jwttype import JWTType
+
+
+class UserService:
+  def __init__(self, session: AsyncSession):
+    self._session = session
+    self._repo: UserRepository = UserRepository(session)
+
+  async def get_by_email(self, email: str):
+    user = await self._repo.get_by_email(email)
+    return success(user) if user else err("Пользователь не найден.")
+
+  async def confirm_email(self, userId: str):
+    return await self._repo.update_by_id(userId, is_mail_verified=True)
+
+  async def register(self, register_request: register.RegisterRequest) -> Result[None]:
+    try:
+      inserted = await self._repo.create(
+        email=register_request.email,
+        password=hash_password(register_request.password),
+        username=register_request.username
+      )
+    except IntegrityError as e:
+      return err("Пользователь с такой почтой или именем пользователя уже зарегистрирован.")
+
+    return success("Пользователь успешно зарегистрирован.")
+      
+  async def authorize(self, login: str, password: str):
+    authenticated = await self._repo.authenticate_user(login, password)
+
+    if not authenticated.success:
+      return err("Неправильный логин или пароль")
+
+    return success(authenticated.value)
+
+
+      
+  async def is_email_verified(self, username: str) -> Result[None]:
+    user = await self._repo.get_by_filter_one(email=username)
+    if not user:
+      return err("Пользователь не найден.")
+    if not user.is_mail_verified:
+      return err("Почта не подтверждена. Если кода нет, запросите его повторно")
+    return success("Почта подтверждена.")
+
+
+  async def delete_profile(self, token: str):
+    user: User = await JWTManager().get_current_user(token, self._session)
+    return await self._repo.delete_by_id(user.userId)

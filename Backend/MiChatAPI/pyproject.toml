@@ -19,6 +19,7 @@ asyncpg = "^0.30.0"
 greenlet = "^3.1.1"
 yarl = "^1.18.3"
 pydantic = {extras = ["email"], version = "^2.10.4"}
+python-multipart = "^0.0.20"
 
 
 [build-system]

@@ -1,12 +1,13 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI
+
+from app.routers.main_router import main_router
+
 from starlette.middleware.cors import CORSMiddleware
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.schemas.account import users, profile
-from app.services import user_services
-from app.cfg.settings import settings
-from app.services import user_services
-
+from typing import Annotated
+from sqlalchemy.orm import Session
+from alembic.config import Config
+from alembic import command
 
 api = FastAPI(
     title="MiChatAPI",
@@ -22,14 +23,8 @@ api.add_middleware (
     allow_headers=["*"]
 )
 
+api.include_router(main_router)
+
 @api.post("/")
 async def main():
   return {"msg": "work"}
-
-@api.post("/api/users")
-async def create_user(user: users.UserCreate, session: AsyncSession = Depends(user_services.get_db)):
-    db_user = await user_services.get_user_by_email(user.email, session)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already in use")
-
-    return await user_services.create_user(user, session)
