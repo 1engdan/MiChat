@@ -2,7 +2,6 @@ import './App.css'
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from "./pages/login/Login"
-import Welcome from "./pages/welcome/Welcome"
 import AuthType from './enum/Auth'
 
 const App = () => {

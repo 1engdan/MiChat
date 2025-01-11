@@ -10,72 +10,96 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 400px;
   height: auto;
+}
 
-  .title {
-    color: white;
-    font-size: 15px;
-    margin-bottom: 25px;
-    text-align: center;
-  }
+.title {
+  color: white;
+  font-size: 15px;
+  margin-bottom: 25px;
+  text-align: center;
+}
 
-  form {
-    width: 100%;
-    height: 100%;
-  }
+form {
+  width: 100%;
+  height: 100%;
+}
 
-  .form-group {
-    margin-bottom: 15px;
-    box-sizing: border-box;
-  }
+.form-group {
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
 
-  .form-group p {
-    display: block;
-    margin-bottom: 10px;
-    color: #BEBEBE;
-    font-size: 10px;
-    text-align: left;
-    width: 100%;
-  }
+.form-group p {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 10px;
+  text-align: left;
+  width: 100%;
+  height: 15px;
+}
 
-  .form-group input {
-    width: 100%;
-    height: 30px;
-    padding: 0px 10px;
-    border-radius: 5px;
-    background-color: #2E2E2E; /* Цвет фона */
-    color: #ffffff;
-    box-sizing: border-box;
-    border: 0px solid; /* Цвет границы */
-    outline: none; /* Убираем стандартную обводку */
-  }
+.form-group p .required {
+  color: #fb777b;
+  font-weight: bold;
+}
 
-  .form-group input:focus {
-    border: 1px solid #7350B0;
-  }
+.form-group p .error-message {
+  color: #fb777b;
+  font-style: italic;
+  font-size: 10px;
+}
 
-  button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #7350B0;
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+.form-group input {
+  width: 100%;
+  height: 30px;
+  padding: 0px 10px;
+  border-radius: 5px;
+  background-color: #2E2E2E; /* Цвет фона */
+  color: #ffffff;
+  box-sizing: border-box;
+  border: 0px solid; /* Цвет границы */
+  outline: none; /* Убираем стандартную обводку */
+}
 
-  button:hover {
-    background-color: #7a55ba;
-  }
+.form-group input:focus {
+  border: 1px solid #7350B0;
+}
 
-  .need-account {
-    margin-top: 15px;
-    color: #7350B0;
-    font-size: 10px;
-    text-align: left;
-    width: 100%;
-    font-weight: bold;
-  }
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #7350B0;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #7a55ba;
+}
+
+.need-account {
+  margin-top: 15px;
+  color: #7350B0;
+  font-size: 10px;
+  text-align: left;
+  width: 100%;
+  font-weight: bold;
+}
+
+.default-paragraph-color {
+  color: #BEBEBE;
+}
+
+.error-paragraph-color {
+  color: #fb777b;
+}
+
+.error-message {
+  font-style: italic;
+  font-size: 8px;
 }

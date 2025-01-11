@@ -17,3 +17,4 @@ class User(_UserBase):
 
     class Config:
         from_attributes = True
+

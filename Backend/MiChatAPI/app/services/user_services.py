@@ -14,50 +14,61 @@ from app.security.hasher import hash_password, verify_password
 from app.security.jwtmanager import JWTManager
 from app.security.jwttype import JWTType
 
-
 class UserService:
-  def __init__(self, session: AsyncSession):
-    self._session = session
-    self._repo: UserRepository = UserRepository(session)
+    def __init__(self, session: AsyncSession):
+        self._session = session
+        self._repo: UserRepository = UserRepository(session)
 
-  async def get_by_email(self, email: str):
-    user = await self._repo.get_by_email(email)
-    return success(user) if user else err("Пользователь не найден.")
+    async def get_by_email(self, email: str):
+        user = await self._repo.get_by_email(email)
+        return success(user) if user else err("Пользователь не найден.")
 
-  async def confirm_email(self, userId: str):
-    return await self._repo.update_by_id(userId, is_mail_verified=True)
+    async def get_by_username(self, username: str):
+        user = await self._repo.get_by_username(username)
+        return success(user) if user else err("Пользователь не найден.")
 
-  async def register(self, register_request: register.RegisterRequest) -> Result[None]:
-    try:
-      inserted = await self._repo.create(
-        email=register_request.email,
-        password=hash_password(register_request.password),
-        username=register_request.username
-      )
-    except IntegrityError as e:
-      return err("Пользователь с такой почтой или именем пользователя уже зарегистрирован.")
+    async def confirm_email(self, userId: str):
+        return await self._repo.update_by_id(userId, is_mail_verified=True)
 
-    return success("Пользователь успешно зарегистрирован.")
-      
-  async def authorize(self, login: str, password: str):
-    authenticated = await self._repo.authenticate_user(login, password)
+    async def is_username_available(self, username: str) -> Result[None]:
+        user = await self._repo.get_by_username(username)
+        if user:
+            return err("Это имя пользователя уже занято.")
+        return success("Это имя пользователя доступно.")
 
-    if not authenticated.success:
-      return err("Неправильный логин или пароль")
+    async def register(self, register_request: register.RegisterRequest) -> Result[None]:
+        # Проверка доступности имени пользователя
+        username_check = await self.is_username_available(register_request.username)
+        if not username_check.success:
+            return username_check
 
-    return success(authenticated.value)
+        try:
+            inserted = await self._repo.create(
+                email=register_request.email,
+                password=hash_password(register_request.password),
+                username=register_request.username
+            )
+        except IntegrityError as e:
+            return err("Пользователь с такой почтой уже зарегистрирован.")
 
+        return success("Пользователь успешно зарегистрирован.")
 
-      
-  async def is_email_verified(self, username: str) -> Result[None]:
-    user = await self._repo.get_by_filter_one(email=username)
-    if not user:
-      return err("Пользователь не найден.")
-    if not user.is_mail_verified:
-      return err("Почта не подтверждена. Если кода нет, запросите его повторно")
-    return success("Почта подтверждена.")
+    async def authorize(self, login: str, password: str):
+        authenticated = await self._repo.authenticate_user(login, password)
 
+        if not authenticated.success:
+            return err("Неправильный логин или пароль")
 
-  async def delete_profile(self, token: str):
-    user: User = await JWTManager().get_current_user(token, self._session)
-    return await self._repo.delete_by_id(user.userId)
+        return success(authenticated.value)
+
+    async def is_email_verified(self, username: str) -> Result[None]:
+        user = await self._repo.get_by_filter_one(email=username)
+        if not user:
+            return err("Пользователь не найден.")
+        if not user.is_mail_verified:
+            return err("Почта не подтверждена. Если кода нет, запросите его повторно")
+        return success("Почта подтверждена.")
+
+    async def delete_profile(self, token: str):
+        user: User = await JWTManager().get_current_user(token, self._session)
+        return await self._repo.delete_by_id(user.userId)

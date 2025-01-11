@@ -7,12 +7,13 @@ from app.database.repository.user_repository import UserRepository
 from app.database.database import get_session
 
 from app.schemas.AccessToken import AccessToken
+from app.schemas.account.checkUsernameRequest import CheckUsernameRequest
 from app.schemas.get_access.register import RegisterRequest
 
 from app.services.user_services import UserService
 
 
-from app.utils.result import Result
+from app.utils.result import Result, err, success
 
 from app.security.jwttype import JWTType
 from app.security.jwtmanager import JWTManager, oauth2_scheme
@@ -33,6 +34,14 @@ async def register(registerRequest: RegisterRequest, session: AsyncSession = Dep
         "message": registered.value
     }
 
+@auth_router.post("/check-username")
+async def check_username(checkUsernameRequest: CheckUsernameRequest, session: AsyncSession = Depends(get_session)):
+    checkUsername = await UserService(session).is_username_available(checkUsernameRequest)
+    if not checkUsername.success:
+        raise HTTPException(status_code=400, detail=checkUsername.error)
+    return {
+        "message": checkUsername.value
+    }
 
 @auth_router.post("/authorize")
 async def authorize(login: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):
@@ -56,7 +65,6 @@ async def authorize(login: str = Form(), password: str = Form(), session: AsyncS
     refresh_token=refresh_token,
     token_type="Bearer"
   )
-
 
 async def refresh_access_token(request: Request):
     

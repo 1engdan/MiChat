@@ -23,14 +23,20 @@ class UserRepository(AbstractRepository):
         user = await UserRepository(self._session).get_by_filter_one(username=login)
 
       if not user:
-        return err("User not found")
+        return err("Пользователь не найден")
 
       if not verify_password(password, user.password):
-        return err("Invalid password")
+        return err("Некорректный пароль")
 
       return success(user)
 
-
+    async def get_by_username(self, username: str) -> Optional[User]:
+        result = await self._session.execute(select(self.model).where(self.model.username == username))
+        user = result.scalars().first()
+        if not user:
+            return None
+        
+        return user
     
     async def get_by_email(self, email) -> Optional[User]:
         result = await self._session.execute(select(self.model).where(self.model.email == email))
@@ -39,6 +45,7 @@ class UserRepository(AbstractRepository):
             return None
         
         return user
+    
     async def delete_by_id(self, id):
         try:
             result = await self._session.execute(delete(self.model).where(self.model.userId == id))

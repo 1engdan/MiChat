@@ -15,6 +15,11 @@ api = FastAPI(
     version="v1",
 )
 
+origins = [
+    "http://localhost:5173",
+    "http://localhost:8000",
+]
+
 api.add_middleware (
     CORSMiddleware,
     allow_origins=["*"],
