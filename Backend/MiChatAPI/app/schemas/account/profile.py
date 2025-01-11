@@ -16,3 +16,7 @@ class Profile(_ProfileBase):
 
     class Config:
         from_attributes = True
+
+class UpdateProfile(_ProfileBase):
+    image: Optional[bytes]
+    pass

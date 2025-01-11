@@ -18,11 +18,9 @@ from app.utils.result import Result, err, success
 from app.security.hasher import verify_password
 from app.security.jwttype import JWTType
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/authorize")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/access/authorize")
 
 async def get_current_user(token: str = Depends(oauth2_scheme), session: AsyncSession = Depends(get_session)) -> User:
-    
-
     payload = JWTManager().decode_token(token)
     if not payload.success:
         raise HTTPException(

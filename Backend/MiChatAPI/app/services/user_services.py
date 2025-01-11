@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models.models import User
 from app.database.repository.user_repository import UserRepository
+from app.database.repository.profile_repository import ProfileRepository
 
 from app.schemas.get_access import authorize, register
 
@@ -18,6 +19,7 @@ class UserService:
     def __init__(self, session: AsyncSession):
         self._session = session
         self._repo: UserRepository = UserRepository(session)
+        self._repoProfile: ProfileRepository = ProfileRepository(session)
 
     async def get_by_email(self, email: str):
         user = await self._repo.get_by_email(email)
@@ -48,7 +50,9 @@ class UserService:
             if exists_info["username_exists"]:
                 return err("Пользователь с таким username уже существует.")
 
-            await self._repo.create(email=register_request.email, username=register_request.username, password=hash_password(register_request.password))
+            new_user = await self._repo.create(email=register_request.email, username=register_request.username, password=hash_password(register_request.password))
+            await self._repoProfile.create_profile(user_id=new_user.userId, name=register_request.username)
+            await self._repoProfile.commit()
             await self._repo.commit()
         except IntegrityError as e:
             return err('error: ' + str(e))

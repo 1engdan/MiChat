@@ -17,7 +17,7 @@ from app.cfg.settings import settings
 from app.database.models.models import User, Profile
 
 config = context.config
-config.set_main_option("sqlalchemy.url", str(settings.db_url()))
+config.set_main_option("sqlalchemy.url", str(settings.db_url))
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
