@@ -68,8 +68,8 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
         } catch (error: any) {
             console.error('Регистрация не удалась:', error);
             setErrors({
-                email: !email ? error.response?.data?.detail : '',
-                username: !username ? error.response?.data?.detail : ''
+                email: 'Адрес электронной почты уже зарегистрирован',
+                username: 'Это имя пользователя уже занято'
             });
         }
     };
@@ -87,7 +87,7 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
             await authorize({ login: email, password });
             console.log('Авторизация успешна');
         } catch (error: any) {
-            console.error('Авторизация не удалась:', error);
+            console.error('Авторизация не удалась:', error.message);
             setErrors({ 
                 email: 'Неверные данные для входа или пароль',
                 password: 'Неверные данные для входа или пароль' });

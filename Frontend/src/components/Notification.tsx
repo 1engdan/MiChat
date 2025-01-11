@@ -23,7 +23,7 @@ const Notification: React.FC<NotificationProps> = ({ message, show, onClose }) =
 
     return (
         <div className={`notification ${visible ? 'show' : ''}`}>
-            {message}
+            <p className="no-select">{message}</p>
         </div>
     );
 };

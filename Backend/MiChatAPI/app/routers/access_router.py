@@ -34,14 +34,6 @@ async def register(registerRequest: RegisterRequest, session: AsyncSession = Dep
         "message": registered.value
     }
 
-@auth_router.post("/check-username")
-async def check_username(checkUsernameRequest: CheckUsernameRequest, session: AsyncSession = Depends(get_session)):
-    checkUsername = await UserService(session).is_username_available(checkUsernameRequest)
-    if not checkUsername.success:
-        raise HTTPException(status_code=400, detail=checkUsername.error)
-    return {
-        "message": checkUsername.value
-    }
 
 @auth_router.post("/authorize")
 async def authorize(login: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):

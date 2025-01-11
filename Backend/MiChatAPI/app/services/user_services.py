@@ -37,20 +37,21 @@ class UserService:
         return success("Это имя пользователя доступно.")
 
     async def register(self, register_request: register.RegisterRequest) -> Result[None]:
-        # Проверка доступности имени пользователя
-        username_check = await self.is_username_available(register_request.username)
-        if not username_check.success:
-            return username_check
-
         try:
-            inserted = await self._repo.create(
-                email=register_request.email,
-                password=hash_password(register_request.password),
-                username=register_request.username
-            )
-        except IntegrityError as e:
-            return err("Пользователь с такой почтой уже зарегистрирован.")
+            # Проверка существования пользователя
+            exists_info = await self._repo.user_exists(email=register_request.email, username=register_request.username)
 
+            if exists_info["email_exists"] and exists_info["username_exists"]:
+                return err("Пользователь с таким email и username уже существует.")
+            if exists_info["email_exists"]:
+                return err("Пользователь с таким email уже существует.")
+            if exists_info["username_exists"]:
+                return err("Пользователь с таким username уже существует.")
+
+            await self._repo.create(email=register_request.email, username=register_request.username, password=hash_password(register_request.password))
+            await self._repo.commit()
+        except IntegrityError as e:
+            return err('error: ' + str(e))
         return success("Пользователь успешно зарегистрирован.")
 
     async def authorize(self, login: str, password: str):

@@ -4,8 +4,8 @@ from app.exc import email
 
 class RegisterRequest(BaseModel):
     email: str
-    password: str
     username:str
+    password: str
 
     @field_validator("email")
     def validate_email(cls, attr):

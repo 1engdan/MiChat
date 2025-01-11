@@ -10,7 +10,24 @@ from sqlalchemy import CursorResult, delete, select, update, insert
 
 class UserRepository(AbstractRepository):
     model = User
+    
+    async def create(self, **kwargs):
+        query = insert(self.model).values(**kwargs).returning(self.model)
+        result = await self._session.execute(query)
+        return result.scalars().first()
 
+    async def user_exists(self, email: str, username: str) -> dict:
+        query_email = select(User).where(User.email == email)
+        query_username = select(User).where(User.username == username)
+
+        result_email = await self._session.execute(query_email)
+        result_username = await self._session.execute(query_username)
+
+        return {
+            "email_exists": result_email.scalar() is not None,
+            "username_exists": result_username.scalar() is not None
+        }
+    
     async def update_by_id(self, userId: str, **kwargs):
         query = update(self.model).where(self.model.userId == userId).values(**kwargs).returning(self.model)
         result = await self._session.execute(query)
