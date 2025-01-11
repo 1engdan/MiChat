@@ -8,6 +8,7 @@ from jwt import encode, decode
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.database.models.models import User
 from app.cfg.settings import settings
 from app.database.repository.user_repository import UserRepository
 from app.database.database import get_session
@@ -17,7 +18,35 @@ from app.utils.result import Result, err, success
 from app.security.hasher import verify_password
 from app.security.jwttype import JWTType
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/authorize")
+
+async def get_current_user(token: str = Depends(oauth2_scheme), session: AsyncSession = Depends(get_session)) -> User:
+    
+
+    payload = JWTManager().decode_token(token)
+    if not payload.success:
+        raise HTTPException(
+            status_code=401,
+            detail=payload.error,
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    username: str = payload.value.get("userId")
+    if username is None:
+        raise HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    user = await UserRepository(session).get_by_filter_one(userId=username)
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="User not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user
 
 class JWTManager:
 
@@ -40,26 +69,3 @@ class JWTManager:
             return success(decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM]))
         except:
             return err("Invalid token")
-    
-    async def get_current_user(self, token: str = Depends(oauth2_scheme), session: AsyncSession = Depends(get_session)):
-        
-        payload = self.decode_token(token)
-        if payload.error:
-            return err(payload.error)
-        
-        username: str = payload.value.get("userId")
-        if username is None:
-            raise HTTPException(
-            status_code=401,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-        
-        user = await UserRepository(session).get_by_filter_one(userId=username)
-        if user is None:
-            raise HTTPException(
-                status_code=401,
-                detail="User not found",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        return user

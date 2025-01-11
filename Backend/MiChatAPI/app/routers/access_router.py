@@ -17,7 +17,6 @@ from app.utils.result import Result, err, success
 
 from app.security.jwttype import JWTType
 from app.security.jwtmanager import JWTManager, oauth2_scheme
-from app.security.jwtmanager import oauth2_scheme
 
 from app.exc.email import BadEmail
 

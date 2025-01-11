@@ -62,8 +62,8 @@ class UserService:
 
         return success(authenticated.value)
 
-    async def is_email_verified(self, username: str) -> Result[None]:
-        user = await self._repo.get_by_filter_one(email=username)
+    async def is_email_verified(self, email: str) -> Result[None]:
+        user = await self._repo.get_by_filter_one(email=email)
         if not user:
             return err("Пользователь не найден.")
         if not user.is_mail_verified:
