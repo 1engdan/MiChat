@@ -4,7 +4,7 @@ from typing import Union
 from app.exc import email
 
 class AuthorizeRequest(BaseModel):
-    login: Union[EmailStr, str]
+    login: EmailStr
     password: str
 
     @field_validator("login")

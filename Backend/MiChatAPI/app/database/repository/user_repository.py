@@ -36,8 +36,6 @@ class UserRepository(AbstractRepository):
 
     async def authenticate_user(self, login: str, password: str) -> Result:
       user = await UserRepository(self._session).get_by_filter_one(email=login)
-      if not user:
-        user = await UserRepository(self._session).get_by_filter_one(username=login)
 
       if not user:
         return err("Пользователь не найден")
