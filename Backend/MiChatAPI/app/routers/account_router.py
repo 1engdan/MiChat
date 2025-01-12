@@ -18,24 +18,24 @@ account_router = APIRouter(
 
 @account_router.put("/updateprofile")
 async def update_profile(updateRequest: UpdateProfile, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
-   result = await ProfileService(session).update_profile(user.userId, updateRequest)
+    result = await ProfileService(session).update_profile(user.userId, updateRequest)
 
-   if not result.success:
-       raise HTTPException(
-            status_code=400, 
+    if not result.success:
+        raise HTTPException(
+            status_code=400,
             detail=result.error
         )
-   
-   return result.value
-   
+
+    return result.value
+
 @account_router.delete("/delete")
 async def delete_account(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await UserService(session).delete_user(user.userId)
 
     if not result.success:
         raise HTTPException(
-            status_code=400, 
+            status_code=400,
             detail=result.error
         )
-    
+
     return result.value
