@@ -27,7 +27,6 @@ class ProfileRepository(AbstractRepository):
                              name: Optional[str],
                              about_me: Optional[str],
                              birthday: Optional[date],
-                             image: Optional[bytes],
                              ) -> Result[None]:
         query = (
             select(self.model)
@@ -38,14 +37,20 @@ class ProfileRepository(AbstractRepository):
         profile = result.scalars().one_or_none()
         if not profile:
             creating = await self.create_profile(user_id=userId, name=name)
-            return success(creating) if creating else err("Some error while attempting resource.")
+            return success(creating) if creating else err("Ошибка при попытке создания ресурса.")
 
-        # Update the profile
+        # Обновление профиля
         update_data = {
             "name": name,
             "about_me": about_me,
-            "birthday": birthday,
-            "image": image
+            "birthday": birthday
         }
+
         updated_profile = await self.update(userId=userId, **update_data)
         return success(updated_profile)
+
+    async def update_image(self, userId: str, image: bytes) -> Result[None]:
+        query = update(self.model).where(self.model.iduser == userId).values(image=image).returning(self.model)
+        result = await self._session.execute(query)
+        await self._session.commit()
+        return success(result.scalars().first())

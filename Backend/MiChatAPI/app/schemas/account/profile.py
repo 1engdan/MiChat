@@ -7,8 +7,6 @@ class _ProfileBase(BaseModel):
     name: Optional[str]
     about_me: Optional[str]
     birthday: Optional[date]
-    image: Optional[bytes]
-
 
 class ProfileCreate(_ProfileBase):
     pass
@@ -21,3 +19,6 @@ class Profile(_ProfileBase):
 
 class UpdateProfile(_ProfileBase):
     pass
+
+class ProfileImage(BaseModel):
+    image: Optional[bytes]
