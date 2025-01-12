@@ -29,7 +29,3 @@ api.add_middleware (
 )
 
 api.include_router(main_router)
-
-@api.post("/")
-async def main():
-  return {"msg": "work"}
