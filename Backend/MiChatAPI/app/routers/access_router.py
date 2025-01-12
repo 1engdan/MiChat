@@ -35,15 +35,12 @@ async def register(registerRequest: RegisterRequest, session: AsyncSession = Dep
 
 
 @auth_router.post("/authorize")
-async def authorize(login: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):
-  user = await UserRepository(session).get_by_filter_one(email=login)
-  if not user:
-    user = await UserRepository(session).get_by_filter_one(username=login)
-
+async def authorize(username: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):
+  user = await UserRepository(session).get_by_filter_one(email=username)
   if not user:
     raise HTTPException(status_code=400, detail="Пользователь не найден")
 
-  authorized = await UserService(session).authorize(login, password)
+  authorized = await UserService(session).authorize(username, password)
   if not authorized.success:
     raise HTTPException(status_code=400, detail=authorized.error)
 
