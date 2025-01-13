@@ -5,12 +5,7 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request, Response
 from app.database.database import get_session
 from app.schemas.get_access.register import RegisterRequest
 from app.services.user_services import UserService
-from app.utils.result import Result, err, success
 
-from app.security.jwttype import JWTType
-from app.security.jwtmanager import JWTManager
-
-from app.exc.email import BadEmail
 from sqlalchemy.ext.asyncio import AsyncSession
 
 auth_router = APIRouter(prefix="/a", tags=["System Access"])
