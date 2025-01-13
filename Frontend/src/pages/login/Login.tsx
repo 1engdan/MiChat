@@ -18,6 +18,7 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
     const [showNotification, setShowNotification] = useState(false); // Состояние для уведомления
     const navigate = useNavigate();
     const location = useLocation();
+    let notific='';
 
     useEffect(() => {
         if (location.pathname === '/register') {
@@ -61,7 +62,8 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
             return;
         }
         try {
-            await register({ email, username, password });
+            await register({ email, password });
+            notific='Регистрация успешна';
             console.log('Регистрация успешна');
             setShowNotification(true);
             navigate('/login');
@@ -84,7 +86,8 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
             return;
         }
         try {
-            await authorize({ login: email, password });
+            await authorize({ username: email, password });
+            notific='Авторизация успешна';
             console.log('Авторизация успешна');
         } catch (error: any) {
             console.error('Авторизация не удалась:', error.message);
@@ -157,11 +160,6 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
             <a className="need-account" onClick={handleToggleLogin}>
                 {isLogin ? 'Нужна учетная запись?' : 'Уже зарегистрированы?'}
             </a>
-            <Notification
-                message="Регистрация успешна!"
-                show={showNotification}
-                onClose={() => setShowNotification(false)}
-            />
         </div>
     );
 };

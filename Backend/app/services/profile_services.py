@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.models.models import User
 from app.database.repository.profile_repository import ProfileRepository
 
-from app.schemas.get_access import authorize, register
 from app.schemas.account.profile import UpdateProfile, ProfileImage
 
 from app.security.hasher import hash_password, verify_password

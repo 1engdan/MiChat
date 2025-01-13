@@ -1,5 +1,4 @@
 from typing import Optional
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.security.hasher import verify_password
 from app.utils.result import Result, err, success
@@ -34,16 +33,16 @@ class UserRepository(AbstractRepository):
         await self._session.commit()
         return result.scalars().first()
 
-    async def authenticate_user(self, login: str, password: str) -> Result:
-      user = await UserRepository(self._session).get_by_filter_one(email=login)
+    async def authenticate_user(self, email: str, password: str) -> Result:
+        user = await self.get_by_filter_one(email=email)
 
-      if not user:
-        return err("Пользователь не найден")
+        if not user:
+            return err("Пользователь не найден")
 
-      if not verify_password(password, user.password):
-        return err("Некорректный пароль")
+        if not verify_password(password, user.password):
+            return err("Некорректный пароль")
 
-      return success(user)
+        return success(user)
 
     async def get_by_username(self, username: str) -> Optional[User]:
         result = await self._session.execute(select(self.model).where(self.model.username == username))
