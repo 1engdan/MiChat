@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.security.hasher import verify_password
 from app.utils.result import Result, err, success
 from ..abstract.abc_repository import AbstractRepository
-from app.database.models.models import User
+from app.database.models.models import Profile, User
 
 from sqlalchemy import CursorResult, delete, select, update, insert
 
@@ -68,3 +68,21 @@ class UserRepository(AbstractRepository):
             return success(result.rowcount)
         except Exception as e:
             return err(str(e))
+        
+    async def delete_user_and_profile(self, userId: str) -> Result[None]:
+        try:
+            # Удаляем профиль
+            profile_delete_query = delete(Profile).where(Profile.iduser == userId)
+            await self._session.execute(profile_delete_query)
+
+            # Удаляем пользователя
+            user_delete_query = delete(User).where(User.userId == userId)
+            await self._session.execute(user_delete_query)
+
+            # Коммитим транзакцию
+            await self._session.commit()
+
+            return success(None)
+        except Exception as e:
+            await self._session.rollback()
+            return err(f"Ошибка при удалении пользователя и профиля: {str(e)}")

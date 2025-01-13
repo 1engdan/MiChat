@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.security.hasher import verify_password
 from app.utils.result import *
 from ..abstract.abc_repository import AbstractRepository
-from app.database.models.models import Profile
+from app.database.models.models import Profile, User
 from datetime import date
 from sqlalchemy import CursorResult, delete, select, update, insert
 from typing import Optional
@@ -39,6 +39,14 @@ class ProfileRepository(AbstractRepository):
             creating = await self.create_profile(user_id=userId, name=name)
             return success(creating) if creating else err("Ошибка при попытке создания ресурса.")
 
+        if not name:
+                # Если имя не указано, используем username из таблицы users
+                user_query = select(User).where(User.userId == userId)
+                user_result = await self._session.execute(user_query)
+                user = user_result.scalars().first()
+                if user:
+                    name = user.username
+                    
         # Обновление профиля
         update_data = {
             "name": name,

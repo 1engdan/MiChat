@@ -12,7 +12,7 @@ from app.utils.result import Result, err, success
 
 from app.security.hasher import hash_password, verify_password
 
-from app.security.jwtmanager import JWTManager
+from app.security.jwtmanager import JWTManager, get_current_user
 from app.security.jwttype import JWTType
 
 class UserService:
@@ -74,6 +74,9 @@ class UserService:
             return err("Почта не подтверждена. Если кода нет, запросите его повторно")
         return success("Почта подтверждена.")
 
-    async def delete_profile(self, token: str):
-        user: User = await JWTManager().get_current_user(token, self._session)
-        return await self._repo.delete_by_id(user.userId)
+    # async def delete_user(self, token: str):
+    #     user: User = await get_current_user(token, self._session)
+    #     return await self._repo.delete_by_id(user.userId)
+
+    async def delete_user(self, userId: str) -> Result[None]:
+        return await self._repo.delete_user_and_profile(userId)
