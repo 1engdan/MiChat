@@ -1,5 +1,3 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.security.hasher import verify_password
 from app.utils.result import *
 from ..abstract.abc_repository import AbstractRepository
 from app.database.models.models import Profile, User
@@ -59,6 +57,41 @@ class ProfileRepository(AbstractRepository):
 
     async def update_image(self, userId: str, image: bytes) -> Result[None]:
         query = update(self.model).where(self.model.iduser == userId).values(image=image).returning(self.model)
+        result = await self._session.execute(query)
+        await self._session.commit()
+        return success(result.scalars().first())
+    
+    async def delete_image(self, userId: str) -> Result[None]:
+        query = update(self.model).where(self.model.iduser == userId).values(image=None).returning(self.model)
+        result = await self._session.execute(query)
+        await self._session.commit()
+        return success(result.scalars().first())
+
+    async def get_profile_by_username(self, username: str) -> Optional[Profile]:
+        query = (
+            select(self.model)
+            .join(User, self.model.iduser == User.userId)
+            .where(User.username == username)
+        )
+        result = await self._session.execute(query)
+        return result.scalars().first()
+
+    async def get_image_by_username(self, username: str) -> Optional[bytes]:
+        query = (
+            select(self.model.image)
+            .join(User, self.model.iduser == User.userId)
+            .where(User.username == username)
+        )
+        result = await self._session.execute(query)
+        return result.scalars().first()
+    
+    async def update_profile_name(self, userId: uuid4, new_name: str) -> Result[None]:
+        query = (
+            update(self.model)
+            .where(self.model.iduser == userId)
+            .values(name=new_name)
+            .returning(self.model)
+        )
         result = await self._session.execute(query)
         await self._session.commit()
         return success(result.scalars().first())

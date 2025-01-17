@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models.models import User
 from app.database.repository.profile_repository import ProfileRepository
+from uuid import uuid4
 
 from app.schemas.account.profile import UpdateProfile, ProfileImage
 
@@ -27,3 +28,21 @@ class ProfileService:
 
     async def update_image(self, userId: str, image_request: ProfileImage):
         return await self._repo.update_image(userId, image_request.image)
+    
+    async def delete_image(self, userId: str):
+        return await self._repo.delete_image(userId)
+    
+    async def get_profile_by_username(self, username: str):
+        profile = await self._repo.get_profile_by_username(username)
+        if not profile:
+            return err("Профиль не найден")
+        return success(profile)
+
+    async def get_image_by_username(self, username: str):
+        image = await self._repo.get_image_by_username(username)
+        if not image:
+            return err("Изображение не найдено")
+        return success(image)
+    
+    async def update_profile_name(self, userId: uuid4, new_name: str):
+        return await self._repo.update_profile_name(userId, new_name)

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.routers.main_router import main_router
+from app.exc.email import BadEmail, bad_email_exception_handler
 
 from starlette.middleware.cors import CORSMiddleware
 
@@ -29,3 +30,6 @@ api.add_middleware (
 )
 
 api.include_router(main_router)
+
+# Регистрация обработчика ошибок
+api.add_exception_handler(BadEmail, bad_email_exception_handler)
