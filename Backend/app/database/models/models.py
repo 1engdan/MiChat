@@ -1,6 +1,5 @@
 import datetime
-
-from sqlalchemy import Date, ForeignKey
+from sqlalchemy import Date, ForeignKey, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -8,6 +7,16 @@ from sqlalchemy.types import LargeBinary
 from typing import List
 import bcrypt
 from app.database.database import Base
+
+class ChatUserAssociation(Base):
+    __tablename__ = 'chat_user'
+
+    chat_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('chats.idchat'), primary_key=True)
+    user_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), primary_key=True)
+
+    user = relationship("User", back_populates="chats")
+    chat = relationship("Chat", back_populates="members")
+
 
 class User(Base):
     __tablename__ = "users"
@@ -21,10 +30,10 @@ class User(Base):
     dataupdated: Mapped[Date] = mapped_column(Date, default=datetime.date.today)
 
     profile = relationship("Profile", back_populates="user", uselist=False)
+    chats = relationship("ChatUserAssociation", back_populates="user")
 
     def verify_password(self, password: str) -> bool:
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
-    
 
 class Profile(Base):
     __tablename__ = "profiles"
@@ -41,7 +50,7 @@ class Chat(Base):
     __tablename__ = "chats"
 
     idchat: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    members: Mapped[List[UUID]] = mapped_column(nullable=False)
+    members = relationship("ChatUserAssociation", back_populates="chat")
 
     messages = relationship("Message", back_populates="chat")
 
