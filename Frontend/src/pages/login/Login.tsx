@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import "./login.css";
 import AuthType from "../../enum/Auth";
-import { register, authorize, check_username } from '../../enum/api';
-import Notification from '../../components/Notification'; // Импортируем компонент уведомления
+import { register, authorize } from '../../enum/api';
 
 interface AuthTypeProp {
     action: AuthType;
