@@ -36,3 +36,22 @@ class Profile(Base):
     image: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
 
     user = relationship("User", back_populates="profile")
+
+class Chat(Base):
+    __tablename__ = "chats"
+
+    idchat: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    members: Mapped[List[UUID]] = mapped_column(nullable=False)
+
+    messages = relationship("Message", back_populates="chat")
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    idmessage: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    chatId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('chats.idchat'), nullable=False)
+    senderId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), nullable=False)
+    message: Mapped[str] = mapped_column(nullable=False)
+    datecreated: Mapped[Date] = mapped_column(Date, default=datetime.date.today)
+
+    chat = relationship("Chat", back_populates="messages")
