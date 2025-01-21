@@ -8,16 +8,6 @@ from typing import List
 import bcrypt
 from app.database.database import Base
 
-class ChatUserAssociation(Base):
-    __tablename__ = 'chat_user'
-
-    chat_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('chats.idchat'), primary_key=True)
-    user_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), primary_key=True)
-
-    user = relationship("User", back_populates="chats")
-    chat = relationship("Chat", back_populates="members")
-
-
 class User(Base):
     __tablename__ = "users"
 
@@ -30,7 +20,8 @@ class User(Base):
     dataupdated: Mapped[Date] = mapped_column(Date, default=datetime.date.today)
 
     profile = relationship("Profile", back_populates="user", uselist=False)
-    chats = relationship("ChatUserAssociation", back_populates="user")
+    messages_sent = relationship("Message", back_populates="sender", foreign_keys="Message.senderId")
+    messages_received = relationship("Message", back_populates="recipient", foreign_keys="Message.recipientId")
 
     def verify_password(self, password: str) -> bool:
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
@@ -46,21 +37,14 @@ class Profile(Base):
 
     user = relationship("User", back_populates="profile")
 
-class Chat(Base):
-    __tablename__ = "chats"
-
-    idchat: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    members = relationship("ChatUserAssociation", back_populates="chat")
-
-    messages = relationship("Message", back_populates="chat")
-
 class Message(Base):
     __tablename__ = "messages"
 
     idmessage: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    chatId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('chats.idchat'), nullable=False)
     senderId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), nullable=False)
+    recipientId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), nullable=False)
     message: Mapped[str] = mapped_column(nullable=False)
     datecreated: Mapped[Date] = mapped_column(Date, default=datetime.date.today)
 
-    chat = relationship("Chat", back_populates="messages")
+    sender = relationship("User", back_populates="messages_sent", foreign_keys="Message.senderId")
+    recipient = relationship("User", back_populates="messages_received", foreign_keys="Message.recipientId")
