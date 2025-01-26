@@ -3,6 +3,4 @@ enum AuthType {
   REGISTER = "Register"
 }
 
-
-
 export default AuthType

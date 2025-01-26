@@ -5,15 +5,34 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Inter";
-  color: white;
 }
 
-body {
-  background-color: #2E2E2E;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+:root {
+  --selected-item-color: #474747;
+  --icon-color: #d9d9d9;
+  --button-color: #4a4a4a;
+  --background-color-1: #363636;
+  --background-color-2: #3a3a3a;
+  --background-color-3: #2e2e2e;
+  --text-color-default: #bebebe;
+  --text-color-active: var(--global-white-color);
+
+  --global-violet-color: #7350B0;
+  --global-violet-color-hover: #7a55ba;
+  --global-red-color: #c33335;
+  --global-red-color-hover: #d74547;
+  --global-white-color: #fff;
+}
+
+body.light {
+  --selected-item-color: #e0e1e5;
+  --icon-color: #6b6c73;
+  --button-color: #cbcbcb;
+  --background-color-1: #f2f3f5;
+  --background-color-2: var(--global-white-color);
+  --background-color-3: #e3e5e8;
+  --text-color-default: #5d5265;
+  --text-color-active: #060607;
 }
 
 p {
@@ -24,4 +43,32 @@ p {
 a {
   cursor: default;
   user-select: none;
+}
+
+span {
+  cursor: default;
+  user-select: none;
+}
+
+img {
+  cursor: default;
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px; /* Ширина скроллбара */
+  height: 12px; /* Высота скроллбара для горизонтального скроллинга */
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px; /* Скругление углов дорожки */
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent; /* Цвет ползунка скроллбара */
+  border-radius: 10px; /* Скругление углов ползунка */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--background-color-3); /* Цвет ползунка при наведении */
 }

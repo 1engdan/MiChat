@@ -1,0 +1,28 @@
+.panel {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 250px; /* Максимальная ширина */
+  height: 50px;
+  background-color: var(--background-color-3); /* Темный фон */
+  padding: 10px;
+  box-sizing: border-box;
+  border-right: 2px solid var(--background-color-1);
+  
+  img {
+    width: 20px; /* Ширина иконки */
+    height: 20px; /* Высота иконки */
+    border-radius: 5px; /* Скругление углов */
+    box-sizing: border-box;
+    padding: 1px;
+    cursor: pointer;
+  }
+
+  img:hover {
+    background-color: var(--background-color-3);
+    border: 1px solid var(--background-color-3);
+  }
+}
+
+

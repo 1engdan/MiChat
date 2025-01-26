@@ -1,0 +1,67 @@
+.profile {
+  max-width: 330px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .item-profile {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    p {
+      color: var(--text-color-default);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    input {
+      width: 100%;
+      height: 30px;
+      border-radius: 5px;
+      padding: 5px 10px;
+      background-color: var(--background-color-3);
+      border: none;
+      outline: none; /* Убираем стандартную обводку */
+      color: var(--text-color-active); /* Цвет текста */
+      font-size: 12px; /* Размер шрифта */
+      
+    }
+    
+    input::placeholder {
+      color: var(--text-color-default); /* Цвет текста заполнителя */
+    }
+    
+    input:focus {
+      border: 1px solid var(--global-violet-color); /* Цвет границы при фокусе */
+      box-shadow: 0 0 5px rgba(115, 80, 176, 0.5); /* Тень при фокусе */
+    }
+  }
+  .save-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 250px); /* Уменьшаем ширину полоски, чтобы она не перекрывала навигационную панель */
+    height: 50px;
+    background-color: var(--background-color-3);
+    border-top: 1px solid var(--background-color-2);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+    margin-left: 250px; /* Сдвигаем полоску вправо, чтобы она не перекрывала навигационную панель */
+  }
+  
+  .save-bar button {
+    margin-left: 10px;
+  }
+}

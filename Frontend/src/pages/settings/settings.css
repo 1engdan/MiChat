@@ -1,0 +1,13 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.container-settin{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  height: 100vh; /* Убедитесь, что контейнер занимает всю высоту экрана */
+}

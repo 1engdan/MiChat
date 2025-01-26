@@ -1,15 +1,24 @@
-.login {
-  width: 100%;
+html, body {
   height: 100%;
-  align-items: center;
+  margin: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login {
   padding: 45px 35px;
   background-color: #3A3A3A;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 400px;
-  height: auto;
 }
 
 .title {
@@ -22,6 +31,7 @@
 form {
   width: 100%;
   height: 100%;
+  margin-bottom: 10px;
 }
 
 .form-group {
@@ -63,27 +73,11 @@ form {
 
 .form-group input:focus {
   border: 1px solid #7350B0;
-}
+  box-shadow: 0 0 5px rgba(115, 80, 176, 0.5); /* Тень при фокусе */
 
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #7350B0;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #7a55ba;
 }
 
 .need-account {
-  margin-top: 15px;
   color: #7350B0;
   font-size: 10px;
   text-align: left;

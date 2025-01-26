@@ -35,10 +35,12 @@ class UserRepository(AbstractRepository):
 
     async def authenticate_user(self, email: str, password: str) -> Result:
         user = await UserRepository(self._session).get_by_filter_one(email=email)
-        if not user:
-            return err("Пользователь не найден")
-        if not verify_password(password, user.password):
-            return err("Некорректный пароль")
+        if not user or not verify_password(password, user.password):
+            return err("Неверные данные для входа или пароль")
+        # if not user:
+        #     return err("Пользователь не найден")
+        # if not verify_password(password, user.password):
+        #     return err("Некорректный пароль")
         return success(user)
 
     async def get_by_username(self, username: str) -> Optional[User]:

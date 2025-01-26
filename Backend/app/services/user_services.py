@@ -43,8 +43,9 @@ class UserService:
     async def authorize(self, email: str, password: str):
         authenticated = await self._repo.authenticate_user(email, password)
         if not authenticated.success:
-            return err("Неправильный логин или пароль")
-        return success(authenticated.value)
+            return err(authenticated.error)
+        return Result(success=True, value=authenticated.value)
+        
 
     async def get_by_email(self, email: str):
         user = await self._repo.get_by_email(email)

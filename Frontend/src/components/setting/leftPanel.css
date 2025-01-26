@@ -1,0 +1,7 @@
+.container-left-panel {
+  display: flex;
+  box-sizing: border-box;
+  flex: 1;
+  max-width: 250px;
+  flex-direction: column;
+}

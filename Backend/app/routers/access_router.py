@@ -21,13 +21,13 @@ async def register(register_request: RegisterRequest, session: AsyncSession = De
 
 @auth_router.post("/authorize")
 async def authorize(username: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):
+    print(f"Received username: {username}, password: {password}")
     user = await UserRepository(session).get_by_filter_one(email=username)
-    if not user:
-        raise HTTPException(status_code=401, detail="Пользователь не найден")
+
     authorized = await UserService(session).authorize(username, password)
     if not authorized.success:
         raise HTTPException(status_code=401, detail=authorized.error)
-    
+
     jwt_manager = JWTManager()
     access_token = jwt_manager.encode_token({ "userId": str(user.userId) }, token_type=JWTType.ACCESS)
     refresh_token = jwt_manager.encode_token({ "userId": str(user.userId) }, token_type=JWTType.REFRESH)
@@ -35,8 +35,8 @@ async def authorize(username: str = Form(), password: str = Form(), session: Asy
         access_token=access_token,
         refresh_token=refresh_token,
         token_type="Bearer"
-        
     )
+
 
 
 async def refresh_access_token(request: Request):

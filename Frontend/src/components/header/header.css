@@ -1,0 +1,18 @@
+.header {
+  display: flex;
+  flex: 1;
+  justify-content: start;
+  align-items: center;
+  background-color: var(--background-color-1); /* Цвет фона */
+  width: 100%;
+  border-bottom: 2px solid var(--background-color-3); /* Граница снизу */
+  min-height: 50px;
+  max-height: 50px;
+  padding: 15px;
+
+  p {
+    color: var(--text-color-active);
+    font-size: 12px;
+    font-weight: 500;
+  }
+}

@@ -1,3 +1,73 @@
 .chatList {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--background-color-1); /* Цвет фона */
+  width: 100%;
+  border-right: 2px solid var(--background-color-3); /* Граница справа */
+  max-width: 250px; /* Максимальная ширина */
+  height: 100%;
+
+  .title-chat {
+    display: flex;
+    padding: 15px 15px 0 15px ;
+    justify-content: space-between; /* Размещает элементы по краям контейнера */
+    align-items: center;
+    width: 100%;
   
+    p {
+      text-transform: uppercase;
+      color: var(--text-color-default);
+      font-size: 10px;
+    }
+    img {
+      width: 15px;
+      height: 15px;
+    }
+    img:hover {
+      background-color: var(--background-color-1);
+      border: 1px solid var(--background-color-1);
+    }
+  }
+
+  .list-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-sizing: content-box;
+    padding: 5px 10px;
+
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-height: 40px;
+      padding: 5px;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s; /* Плавный переход для фона и цвета текста */
+
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+      .texts {
+        span {
+          font-size: 12px;
+          color: var(--text-color-default)
+        }
+      }
+    }
+    .item.selected {
+      background-color: var(--selected-item-color); /* Цвет фона при клике */
+      color: var(--text-color-active);
+
+      .texts span {
+        color: var(--text-color-active); /* Цвет текста при клике */
+      }
+    }
+    .item:hover {
+      background-color: var(--selected-item-color);
+    }
+  }
 }
+

@@ -1,10 +1,17 @@
 import axios from 'axios';
-import { data } from 'react-router-dom';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/v1/access',  // URL вашего FastAPI приложения
+    baseURL: 'http://localhost:8000',  // URL вашего FastAPI приложения
 });
 
-export const register = (data: { email: string; password: string }) => api.post('/register', data);
-export const authorize = (data: { username: string; password: string }) => api.post('/authorize', data);
-export const check_username = (data: { username: string }) => api.post('/check-username', data)
+export const register = (data: { email: string; password: string }) => api.post('/a/register', data);
+export const authorize = (data: { username: string; password: string }) => {
+    const formData = new FormData();
+    formData.append('username', data.username);
+    formData.append('password', data.password);
+    return api.post('/a/authorize', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+};

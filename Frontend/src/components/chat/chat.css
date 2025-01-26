@@ -1,3 +1,26 @@
 .chat {
   flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color-2);
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.chat-content {
+  background-color: var(--background-color-1);
+  text-align: center;
+  width: 100%;
+}
+
+.no-chat-selected {
+  text-align: center;
+  background-color: var(--background-color-1);
+  border-radius: 5px;
+  padding: 10px;
+  color: var(--text-color-default);
+  font-size: 12px;
 }
