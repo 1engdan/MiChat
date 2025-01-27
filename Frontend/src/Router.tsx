@@ -6,7 +6,7 @@ import Chats from "./pages/chats/Chats"
 import AuthType from './enum/Auth'
 import Settings from './pages/settings/Settings';
 
-const App = () => {
+const Router = () => {
   useEffect(() => {
     const handleContextMenu = (e: { preventDefault: () => void; }) => {
       e.preventDefault(); // Предотвращаем стандартное поведение
@@ -32,4 +32,4 @@ const App = () => {
   )
 }
 
-export default App
+export default Router

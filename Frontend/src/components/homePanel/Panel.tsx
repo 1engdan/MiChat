@@ -71,12 +71,14 @@ const Panel: React.FC = () => {
         src={isChatActive ? OnChat : offChat}
         alt="chat"
         onClick={handleChatClick}
+        draggable="false"
       />
-      <img src={profile} alt="profile" />
+      <img src={profile} alt="profile" draggable="false"/>
       <img
         src={isSettingsActive ? OnStg : offStg}
         alt="settings"
         onClick={handleSettingsClick}
+        draggable="false"
       />
     </div>
   );

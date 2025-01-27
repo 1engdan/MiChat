@@ -45,6 +45,11 @@ a {
   user-select: none;
 }
 
+h2 {
+  cursor: default;
+  user-select: none;
+}
+
 span {
   cursor: default;
   user-select: none;

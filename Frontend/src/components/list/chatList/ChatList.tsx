@@ -30,9 +30,10 @@ const ChatList: React.FC<ChatListProps> = ({ setSelectedChat }) => {
           className={`item ${selectedItem === 'chat1' ? 'selected' : ''}`}
           onClick={() => handleChatSelect('chat1')}
         >
-          <img src={avatar} alt="avatar" />
+          <img src={avatar} alt="avatar" draggable="false" />
           <div className="texts">
             <span>Name</span>
+            <p>hello</p>
           </div>
         </div>
 
@@ -40,9 +41,10 @@ const ChatList: React.FC<ChatListProps> = ({ setSelectedChat }) => {
           className={`item ${selectedItem === 'chat2' ? 'selected' : ''}`}
           onClick={() => handleChatSelect('chat2')}
         >
-          <img src={avatar} alt="avatar" />
+          <img src={avatar} alt="avatar" draggable="false"/>
           <div className="texts">
             <span>Name</span>
+            <p>hello</p>
           </div>
         </div>
 
@@ -50,19 +52,10 @@ const ChatList: React.FC<ChatListProps> = ({ setSelectedChat }) => {
           className={`item ${selectedItem === 'chat3' ? 'selected' : ''}`}
           onClick={() => handleChatSelect('chat3')}
         >
-          <img src={avatar} alt="avatar" />
+          <img src={avatar} alt="avatar" draggable="false"/>
           <div className="texts">
             <span>Name</span>
-          </div>
-        </div>
-
-        <div
-          className={`item ${selectedItem === 'chat4' ? 'selected' : ''}`}
-          onClick={() => handleChatSelect('chat4')}
-        >
-          <img src={avatar} alt="avatar" />
-          <div className="texts">
-            <span>Name</span>
+            <p>hello</p>
           </div>
         </div>
       </div>

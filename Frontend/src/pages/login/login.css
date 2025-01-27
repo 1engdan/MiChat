@@ -4,6 +4,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #2e2e2e;
 }
 
 .container-login {
