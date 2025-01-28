@@ -1,0 +1,27 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+      
+
+jobs:
+  Deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Downloading repository
+        uses: actions/checkout@v4
+
+      - name: Copy .env file
+        run: |
+          cd Backend/
+          echo "${{ secrets.ENV_MICHAT }}" > .env
+
+      - name: Run Backend
+        run: |
+          make build-backend
+
+      - name: Run Frontend
+        run: |
+          make build-frontend
