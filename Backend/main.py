@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.database.database import create_tables
 from app.routers.main_router import main_router
 from app.exc.email import BadEmail, bad_email_exception_handler
 
@@ -33,3 +34,7 @@ api.include_router(main_router)
 
 # Регистрация обработчика ошибок
 api.add_exception_handler(BadEmail, bad_email_exception_handler)
+
+@api.on_event("startup")
+async def startup_event():
+    await create_tables()

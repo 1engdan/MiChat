@@ -23,3 +23,11 @@ async def get_session():
     async_session = sessionmaker(await get_engine(), expire_on_commit=False, class_=AsyncSession)
     async with async_session() as session:
         yield session
+
+async def create_tables():
+    try:
+        engine = await get_engine()
+        async with engine.begin() as eng:
+            await eng.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        print("Не удалось создать таблицы. ", str(e))
