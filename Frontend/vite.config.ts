@@ -5,6 +5,6 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3002 // Порт, на котором будет запущен сервер
+    port: 3333 // Порт, на котором будет запущен сервер
   },
 })

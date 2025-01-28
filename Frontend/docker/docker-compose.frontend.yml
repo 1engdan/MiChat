@@ -7,6 +7,6 @@ services:
       context: .
       dockerfile: docker/Dockerfile.frontend
     ports:
-      - 3002:80
+      - 3333:80
     environment:
-      - VITE_PORT=3002
+      - VITE_PORT=3333
