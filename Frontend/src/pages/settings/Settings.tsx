@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ContentPanel from '../../components/setting/contentPanel/ContentPanel';
 import LeftPanel from '../../components/setting/LeftPanel';
 import './settings.css';
