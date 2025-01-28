@@ -56,10 +56,7 @@ const Chat: React.FC<ChatProps> = ({ selectedChat }) => {
           <img src={avatar} alt="ava" />
           <div className="texts">
             <p>
-              blah blah blah blah blah blah blah blah blah blah blah blah
-              blah blah blah blah blah blah blah blah blah blah blah blah
-              blah blah blah blah blah blah blah blah blah blah blah blah
-              blah blah blah blah blah blah blah blah blah blah blah blah
+              {selectedChat}
               </p>
               <span>15:19</span>
             </div> 

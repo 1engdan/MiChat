@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./login.css";
 import AuthType from "../../enum/Auth";
-import { register, authorize } from '../../enum/api';
+import { authorize } from '../../enum/api';
 import Button from '../../components/buttons/Button';
 
 interface AuthTypeProp {
@@ -21,6 +21,7 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
         setIsLogin(!isLogin);
         navigate(isLogin ? '/register' : '/login');
     };
+
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,13 +44,7 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
                 return;
             }
             navigate('/');
-        } catch (error: any) {
-            if (error.response && error.response.data) {
-                setError({ email: error.response.data.detail });
-            } else {
-                console.error('Авторизация не удалась:', error.message);
-            }
-        }
+        } catch { console.log('error'); }
     };
     
 

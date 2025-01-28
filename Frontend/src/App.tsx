@@ -1,10 +1,11 @@
 import './App.css'
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from "./pages/login/Login"
 import Chats from "./pages/chats/Chats"
 import AuthType from './enum/Auth'
 import Settings from './pages/settings/Settings';
+
 
 const App = () => {
   useEffect(() => {

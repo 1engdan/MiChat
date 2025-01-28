@@ -5,7 +5,6 @@ import Detail from "../../components/detail/Detail";
 import { useState } from "react";
 
 const Chats: React.FC = () => {
-  const user = false;
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
 
   return (
