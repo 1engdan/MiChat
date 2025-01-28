@@ -13,10 +13,13 @@ import LightOffChat from '../../assets/light-theme-icon/offChat.svg';
 import LightOffStg from '../../assets/light-theme-icon/offSettin.svg';
 import LightProfile from '../../assets/light-theme-icon/profile.svg';
 
+import Profile from '../profile/Profile';
+
 const Panel: React.FC = () => {
   const [isChatActive, setIsChatActive] = useState(false);
   const [isSettingsActive, setIsSettingsActive] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -54,11 +57,15 @@ const Panel: React.FC = () => {
   }, []);
 
   const handleChatClick = () => {
-    navigate('/chats'); // Переход на страницу чатов
+    navigate('/chats');
   };
 
+  const handleProfileClick = () => {
+    setIsProfileOpen(true)
+  }
+
   const handleSettingsClick = () => {
-    navigate('/settings'); // Переход на страницу настроек
+    navigate('/settings');
   };
 
   const offChat = isDarkTheme ? DarkOffChat : LightOffChat;
@@ -73,13 +80,18 @@ const Panel: React.FC = () => {
         onClick={handleChatClick}
         draggable="false"
       />
-      <img src={profile} alt="profile" draggable="false"/>
+      <img src={profile}
+      alt="profile"
+      draggable="false"
+      onClick={handleProfileClick}
+      />
       <img
         src={isSettingsActive ? OnStg : offStg}
         alt="settings"
         onClick={handleSettingsClick}
         draggable="false"
       />
+      <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
     </div>
   );
 };

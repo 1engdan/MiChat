@@ -58,3 +58,12 @@
   width: 90px;
   height: 30px;
 }
+
+.button-send {
+  background-color: var(--button-color);
+  color: var(--icon-color);
+  width: 100px;
+}
+.button-send:hover {
+  background-color: var(--background-color-2);
+}
