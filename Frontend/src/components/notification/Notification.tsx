@@ -1,29 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import './notification.css';
+import React from 'react';
+import './notification.css'; // Создайте файл стилей для уведомления
 
 interface NotificationProps {
     message: string;
-    show: boolean;
     onClose: () => void;
 }
 
-const Notification: React.FC<NotificationProps> = ({ message, show, onClose }) => {
-    const [visible, setVisible] = useState(show);
-
-    useEffect(() => {
-        if (show) {
-            setVisible(true);
-            const timer = setTimeout(() => {
-                setVisible(false);
-                onClose();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [show, onClose]);
-
+const Notification: React.FC<NotificationProps> = ({ message, onClose }) => {
     return (
-        <div className={`notification ${visible ? 'show' : ''}`}>
-            <p className="no-select">{message}</p>
+        <div className="notification">
+            <p>{message}</p>
+            <button onClick={onClose}>Закрыть</button>
         </div>
     );
 };

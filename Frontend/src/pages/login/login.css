@@ -98,3 +98,9 @@ form {
   font-style: italic;
   font-size: 8px;
 }
+
+.available-message {
+  font-style: italic;
+  font-size: 10px;
+  color: #49d55e;
+}

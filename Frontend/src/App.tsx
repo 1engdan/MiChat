@@ -1,15 +1,31 @@
-import './App.css'
+import './App.css';
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from "./pages/login/Login"
-import Chats from "./pages/chats/Chats"
-import AuthType from './enum/Auth'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from "./pages/login/Login";
+import Chats from "./pages/chats/Chats";
+import AuthType from './enum/Auth';
 import Settings from './pages/settings/Settings';
+import { ReactElement } from 'react';
 
+// Функция для проверки аутентификации пользователя
+const isAuthenticated = (): boolean => {
+  const accessToken = localStorage.getItem('access_token');
+  return !!accessToken; // Возвращает true, если токен существует
+};
 
-const App = () => {
+// Компонент PrivateRoute для защиты маршрутов
+const PrivateRoute = ({ element }: { element: ReactElement }): ReactElement => {
+  return isAuthenticated() ? element : <Navigate to="/login" />;
+};
+
+// Компонент NotFound для обработки несуществующих маршрутов
+const NotFound = (): ReactElement => {
+  return <Navigate to="/login" />;
+};
+
+const App = (): ReactElement => {
   useEffect(() => {
-    const handleContextMenu = (e: { preventDefault: () => void; }) => {
+    const handleContextMenu = (e: Event): void => {
       e.preventDefault(); // Предотвращаем стандартное поведение
     };
 
@@ -20,17 +36,18 @@ const App = () => {
       document.removeEventListener('contextmenu', handleContextMenu);
     };
   }, []);
-  
+
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login action={AuthType.LOGIN} />} />
         <Route path="/register" element={<Login action={AuthType.REGISTER} />} />
-        <Route path="/chats" element={<Chats/>} />
-        <Route path="/settings" element={<Settings/>} />
+        <Route path="/chats" element={<PrivateRoute element={<Chats />} />} />
+        <Route path="/settings" element={<PrivateRoute element={<Settings />} />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
-  )
-}
+  );
+};
 
-export default App
+export default App;

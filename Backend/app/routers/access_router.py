@@ -17,11 +17,10 @@ async def register(register_request: RegisterRequest, session: AsyncSession = De
     result = await UserService(session).register(register_request)
     if not result.success:
         raise HTTPException(status_code=400, detail=result.error)
-    return {"msg register": result.value}
+    return {"success": result.value}
 
 @auth_router.post("/authorize")
 async def authorize(username: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):
-    print(f"Received username: {username}, password: {password}")
     user = await UserRepository(session).get_by_filter_one(email=username)
 
     authorized = await UserService(session).authorize(username, password)
@@ -37,7 +36,12 @@ async def authorize(username: str = Form(), password: str = Form(), session: Asy
         token_type="Bearer"
     )
 
-
+@auth_router.get("/check_username")
+async def check_username(username: str, session: AsyncSession = Depends(get_session)):
+    user = await UserRepository(session).get_by_filter_one(username=username)
+    if user:
+        raise HTTPException(status_code=400, detail="Имя занято")
+    return {"detail": "Имя доступно"}
 
 async def refresh_access_token(request: Request):
     

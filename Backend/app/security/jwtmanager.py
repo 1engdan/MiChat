@@ -73,3 +73,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme), session: AsyncSe
             headers={"WWW-Authenticate": "Bearer"},
         )
     return user
+    
+def get_token(request: Request):
+    token = request.cookies.get('users_access_token')
+    if not token:
+        raise TokenNoFoundException
+    return token
