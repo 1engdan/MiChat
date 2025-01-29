@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ApiResponse } from '../enum/apiTypes'; // Импортируйте интерфейс
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000',  // URL вашего FastAPI приложения
+    baseURL: 'https://api.michat.pw',  // URL вашего FastAPI приложения
 });
 
 export const register = (data: { email: string; username: string; password: string }) => api.post<ApiResponse>('/a/register', data);
