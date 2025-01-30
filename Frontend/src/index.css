@@ -53,6 +53,10 @@ h2 {
   user-select: none;
 }
 
+div {
+  cursor: default;
+  user-select: none;
+}
 span {
   cursor: default;
   user-select: none;

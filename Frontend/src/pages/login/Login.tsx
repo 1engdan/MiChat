@@ -5,7 +5,7 @@ import AuthType from "../../enum/Auth";
 import { authorize, register, checkUsername } from '../../request/api';
 import Button from '../../components/buttons/Button';
 import { AxiosError } from 'axios';
-import { ApiResponse } from '../../enum/apiTypes';
+import { ApiResponse } from '../../interface/apiTypes';
 import Notification from '../../components/notification/Notification'; // Импортируйте компонент уведомления
 
 interface AuthTypeProp {
@@ -99,7 +99,7 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
                 return;
             }
             // Сохраняем токены в localStorage
-            localStorage.setItem('access_token', response.data.access_token);
+            localStorage.setItem('access_token', response?.data.access_token);
             localStorage.setItem('refresh_token', response.data.refresh_token);
             setNotification('Вход успешен!');
             navigate('/chats');

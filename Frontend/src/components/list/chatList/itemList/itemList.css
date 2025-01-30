@@ -1,0 +1,36 @@
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для фона и цвета текста */
+
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+    .texts {
+      span {
+        font-size: 12px;
+        color: var(--text-color-default)
+      }
+      p { 
+        font-size: 12px;
+        color: var(--text-color-default)
+      }
+    }
+  }
+  .item.selected {
+    background-color: var(--selected-item-color); /* Цвет фона при клике */
+    color: var(--text-color-active);
+
+    .texts span {
+      color: var(--text-color-active); /* Цвет текста при клике */
+    }
+  }
+  .item:hover {
+    background-color: var(--selected-item-color);
+  }
