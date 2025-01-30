@@ -24,7 +24,7 @@ setting_router = APIRouter(
     tags=["Setting"]
 )
 
-@setting_router.put("/upload-profile")
+@setting_router.put("/profile/upload")
 async def update_profile(updateRequest: UpdateProfile, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     logging.info(f"Received update request: {updateRequest}")
     result = await ProfileService(session).update_profile(user.userId, updateRequest)
@@ -42,7 +42,7 @@ async def update_profile(updateRequest: UpdateProfile, user: User = Depends(get_
         "birthday": result.value.birthday
     }
 
-@setting_router.delete("/delete-profile")
+@setting_router.delete("/profile/delete")
 async def delete_account(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await UserService(session).delete_user(user.userId)
 
@@ -54,7 +54,7 @@ async def delete_account(user: User = Depends(get_current_user), session: AsyncS
 
     return {"msg": "Аккаунт успешно удален", "result": result.success}
 
-@setting_router.put("/upload-image-profile/")
+@setting_router.put("/profile/image/upload")
 async def upload_image(file: UploadFile = File(...), user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     contents = await file.read()
     image_request = ProfileImage(image=contents)
@@ -68,7 +68,7 @@ async def upload_image(file: UploadFile = File(...), user: User = Depends(get_cu
 
     return {"msg": "Изображение успешно загружено", "result": result.success}
 
-@setting_router.delete("/delete-image-profile")
+@setting_router.delete("/profile/image/delete")
 async def delete_image(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await ProfileService(session).delete_image(user.userId)
 
@@ -80,7 +80,7 @@ async def delete_image(user: User = Depends(get_current_user), session: AsyncSes
 
     return {"msg": "Изображение успешно удалено", "result": result.success}
 
-@setting_router.put("/update-username")
+@setting_router.put("/username/update")
 async def update_username(request: UpdateUsernameRequest, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await UserService(session).update_username(user.userId, request.new_username, request.current_password)
 
@@ -93,7 +93,7 @@ async def update_username(request: UpdateUsernameRequest, user: User = Depends(g
     return {"msg": "Username успешно обновлен", "result": result.success}
 
 
-@setting_router.put("/update-email")
+@setting_router.put("/email/update")
 async def update_email(request: UpdateEmailRequest, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await UserService(session).update_email(user.userId, request.new_email, request.current_password)
 
@@ -105,7 +105,7 @@ async def update_email(request: UpdateEmailRequest, user: User = Depends(get_cur
 
     return {"msg": "Email успешно обновлен", "result": result.success}
 
-@setting_router.put("/update-password")
+@setting_router.put("/password/update")
 async def update_password(request: UpdatePasswordRequest, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await UserService(session).update_password(user.userId, request.new_password, request.current_password)
 

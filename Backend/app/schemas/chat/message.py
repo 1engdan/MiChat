@@ -11,8 +11,8 @@ class MessageCreate(_MessageBase):
     content: str
 
 class MessageRead(_MessageBase):
-    # senderId: uuid.UUID
-    # recipientId: uuid.UUID
+    senderId: uuid.UUID
+    recipientId: uuid.UUID
     message: str
 
 class Message(_MessageBase):

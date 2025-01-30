@@ -63,10 +63,14 @@ const Login: React.FC<AuthTypeProp> = ({ action }) => {
                 return;
             }
             setNotification('Регистрация успешна!');
-            navigate('/login');
+            handleToggleLogin;
         } catch (err) {
             const error = err as AxiosError<ApiResponse>;
             if (error.response && error.response.data && error.response.data.detail) {
+                if (error.response.data.detail.includes('email') && error.response.data.detail.includes('username')) {
+                    setError(prevError => ({ ...prevError, email: 'Пользователь с таким email уже существует.',
+                                                           username: 'Пользователь с таким username уже существует' }));
+                }
                 if (error.response.data.detail.includes('email')) {
                     setError(prevError => ({ ...prevError, email: error.response?.data.detail }));
                 }

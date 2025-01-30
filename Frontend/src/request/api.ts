@@ -1,16 +1,17 @@
 import axios from 'axios';
-import { ApiResponse } from '../enum/apiTypes'; // Импортируйте интерфейс
+import { ApiResponse, ChatData } from '../enum/apiTypes'; // Импортируйте интерфейс
 
 const api = axios.create({
-    baseURL: 'https://api.michat.pw',  // URL вашего FastAPI приложения
+    baseURL: 'http://localhost:8000',  // URL вашего FastAPI приложения localhost:8000 api.michat.pw
 });
 
-export const register = (data: { email: string; username: string; password: string }) => api.post<ApiResponse>('/a/register', data);
+export const register = (data: { email: string; username: string; password: string }) => api.post<ApiResponse<void>>('/a/register', data);
 export const authorize = (data: { username: string; password: string }) => {
     const formData = new FormData();
     formData.append('username', data.username);
     formData.append('password', data.password);
-    return api.post<ApiResponse>('/a/authorize', formData);
+    return api.post<ApiResponse<void>>('/a/authorize', formData);
 };
 
-export const checkUsername = (username: string) => api.get<ApiResponse>(`/a/check_username?username=${username}`);
+export const checkUsername = (username: string) => api.get<ApiResponse<void>>(`/a/check_username?username=${username}`);
+export const getUsersWithChats = () => api.get<ApiResponse<ChatData[]>>('/chat/users');
