@@ -5,7 +5,6 @@ from app.utils.result import err, success, Result
 from app.database.repository.user_repository import UserRepository
 from app.database.repository.chat_repository import ChatRepository
 from app.schemas.chat.message import MessageCreate
-from app.schemas.account.users import UserList
 
 class ChatService:
     def __init__(self, session: AsyncSession):

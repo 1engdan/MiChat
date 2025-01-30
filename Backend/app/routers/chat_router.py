@@ -6,7 +6,6 @@ from app.security.jwtmanager import get_current_user
 from app.services.chat_services import ChatService
 from app.database.database import get_session
 from app.schemas.chat.message import MessageRead, MessageCreate
-from app.schemas.account.users import UserList
 
 chat_router = APIRouter(
     prefix="/chat",
