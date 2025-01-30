@@ -20,7 +20,7 @@ async def register(register_request: RegisterRequest, session: AsyncSession = De
     return {"success": result.value}
 
 @auth_router.post("/authorize")
-async def authorize(username: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):
+async def authorize(response: Response, username: str = Form(), password: str = Form(), session: AsyncSession = Depends(get_session)):
     user = await UserRepository(session).get_by_filter_one(email=username)
 
     authorized = await UserService(session).authorize(username, password)
@@ -30,6 +30,7 @@ async def authorize(username: str = Form(), password: str = Form(), session: Asy
     jwt_manager = JWTManager()
     access_token = jwt_manager.encode_token({ "userId": str(user.userId) }, token_type=JWTType.ACCESS)
     refresh_token = jwt_manager.encode_token({ "userId": str(user.userId) }, token_type=JWTType.REFRESH)
+    response.set_cookie(key=jwt_manager.SECRET_KEY, value=access_token, httponly=True)
     return AccessToken(
         access_token=access_token,
         refresh_token=refresh_token,
