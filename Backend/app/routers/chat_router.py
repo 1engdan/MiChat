@@ -31,9 +31,10 @@ async def send_message(message: MessageCreate, current_user: User = Depends(get_
 
     return {'recipient': message.recipient, 'content': message.content}
 
-@chat_router.get("/users", response_model=List[UserList])
-async def get_chat_users(current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
-    result = await ChatService(session).get_chat_users(current_user.userId)
+
+@chat_router.get("/chats/all")
+async def get_all_chats(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    result = await ChatService(session).get_chat_users(user.userId)
 
     if not result.success:
         raise HTTPException(status_code=400, detail=result.error)
