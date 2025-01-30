@@ -6,7 +6,7 @@ from app.security.jwtmanager import get_current_user
 from app.services.chat_services import ChatService
 from app.database.database import get_session
 from app.schemas.chat.message import MessageRead, MessageCreate
-from app.schemas.account.users import User as UserList
+from app.schemas.account.users import UserList
 
 chat_router = APIRouter(
     prefix="/chat",
@@ -30,7 +30,6 @@ async def send_message(message: MessageCreate, current_user: User = Depends(get_
         raise HTTPException(status_code=400, detail=result.error)
 
     return {'recipient': message.recipient, 'content': message.content}
-
 
 @chat_router.get("/chats/all")
 async def get_all_chats(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
