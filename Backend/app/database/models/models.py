@@ -45,5 +45,5 @@ class Message(Base):
     message: Mapped[str] = mapped_column(nullable=False)
     datecreated: Mapped[Date] = mapped_column(Date, default=datetime.date.today)
 
-    sender = relationship("User", back_populates="messages_sent", foreign_keys="Message.senderId")
-    recipient = relationship("User", back_populates="messages_received", foreign_keys="Message.recipientId")
+    sender: Mapped["User"] = relationship("User", foreign_keys=[senderId], back_populates="messages_sent")
+    recipient: Mapped["User"] = relationship("User", foreign_keys=[recipientId], back_populates="messages_received")

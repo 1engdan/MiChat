@@ -30,9 +30,10 @@ class ChatRepository(AbstractRepository):
 
     async def get_chat_users(self, user_id: UUID):
        query = (
-           select(self.model.recipient)
+           select(User.username.label("chat_name"))
+           .select_from(self.model)
            .where(or_(self.model.senderId==user_id, self.model.recipientId==user_id))
-           .join(User, self.model.recipientId==user_id or self.model.senderId==user_id) 
+           .join(User, self.model.recipientId==user_id or self.model.senderId==user_id)
         )
        
        result = await self._session.execute(query)
