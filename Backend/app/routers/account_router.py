@@ -74,4 +74,4 @@ async def get_username(userId: str, session: AsyncSession = Depends(get_session)
     if not result.success:
         raise HTTPException(status_code=404, detail=result.error)
     
-    return result.value
+    return {"username": result.value}
