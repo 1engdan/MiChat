@@ -1,35 +1,91 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './detail.css';
 import avatar from '../../assets/avatar.svg';
+import { fetchProfile, fetchImage } from '../../request/api';
+import { Profile as ProfileInterface } from '../../interface/Profile';
+import Profile from '../profile/Profile'; // Import the Profile component
 
-const Detail: React.FC = () => {
+interface DetailProps {
+  selectedChat: string | null;
+  openChat: (username: string) => void; // Add the openChat function prop
+}
+
+const Detail: React.FC<DetailProps> = ({ selectedChat }) => {
+  const [profile, setProfile] = useState<ProfileInterface | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (selectedChat) {
+        try {
+          const profileData = await fetchProfile(selectedChat);
+          setProfile(profileData);
+
+          const avatarBlob = await fetchImage(selectedChat);
+          const avatarUrl = URL.createObjectURL(avatarBlob);
+          setAvatarUrl(avatarUrl);
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [selectedChat]);
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('ru-RU', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}г.`;
+  };
+
+  const handleOpenProfile = () => {
+    setIsProfileOpen(true);
+  };
+
+  const handleCloseProfile = () => {
+    setIsProfileOpen(false);
+  };
+
+  if (!profile) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="detail-container">
       <div className="header-detail"></div>
       <div className="avatar-container">
-        <img src={avatar} alt="Avatar"/>
+        <img src={avatarUrl || avatar} alt="Avatar" />
       </div>
       <div className="user-details">
-        <h2>namenamename</h2>
-        <p>username</p>
+        <h2>{profile.name}</h2>
+        <p>{profile.username}</p>
       </div>
       <div className="user-info">
-        <div className="item-info">
-          <p className='title-info-text'>Обо мне</p>
-          <p>blah blah blah</p>
-        </div>
-        <div className="item-info">
-          <p className='title-info-text'>День рождения</p>
-          <p>24 ноября 2024 г.</p>
-        </div>
-        <div className="item-info">
-          <p className='title-info-text'>Участник с</p>
-          <p>24 ноября 2024 г.</p>
-        </div>
+        {profile.about_me && (
+          <div className="item-info">
+            <p className='title-info-text'>Обо мне</p>
+            <p>{profile.about_me}</p>
+          </div>
+        )}
+        {profile.registdate && (
+          <div className="item-info">
+            <p className='title-info-text'>Участник с</p>
+            <p>{formatDate(profile.registdate)}</p>
+          </div>
+        )}
       </div>
       <div className="footer">
-        <p>Полный профиль</p>
+        <p onClick={handleOpenProfile}>Полный профиль</p>
       </div>
+      <Profile
+        isOpen={isProfileOpen}
+        onClose={handleCloseProfile}
+        selectedChat={selectedChat}
+      />
     </div>
   );
 };

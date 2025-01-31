@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import './chat.css';
 
 import DarkOffProfile from '../../assets/dark-theme-icon/profile.svg';
+import DarkOnProfile from '../../assets/dark-theme-icon/onProfile.svg';
 import DarkSend from '../../assets/dark-theme-icon/sendMes.svg';
 import DarkFile from '../../assets/dark-theme-icon/addFile.svg';
 
 import LightOffProfile from '../../assets/light-theme-icon/profile.svg';
 import LightSend from '../../assets/light-theme-icon/sendMes.svg';
 import LightFile from '../../assets/light-theme-icon/addFile.svg';
+import LightOnProfile from '../../assets/light-theme-icon/onProfile.svg';
 
 import { fetchMessages, fetchProfile, sendMessage as sendMessageApi } from '../../request/api';
 import { Message } from '../../interface/Message';
@@ -15,9 +17,11 @@ import ChatMessages from './chatMessages/ChatMessages';
 
 interface ChatProps {
   selectedChat: string | null;
+  toggleDetail: () => void; // New prop for toggling detail visibility
+  showDetail: boolean; // New prop to indicate if details are shown
 }
 
-const Chat: React.FC<ChatProps> = ({ selectedChat }) => {
+const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [messages, setMessages] = useState<{ content: string; time: string; sender: string }[]>([]);
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -149,7 +153,7 @@ const Chat: React.FC<ChatProps> = ({ selectedChat }) => {
     }
   };
 
-  const profile = isDarkTheme ? DarkOffProfile : LightOffProfile;
+  const profileIcon = showDetail ? (isDarkTheme ? DarkOnProfile : LightOnProfile) : (isDarkTheme ? DarkOffProfile : LightOffProfile);
   const send = isDarkTheme ? DarkSend : LightSend;
   const file = isDarkTheme ? DarkFile : LightFile;
 
@@ -162,7 +166,7 @@ const Chat: React.FC<ChatProps> = ({ selectedChat }) => {
               <p>{chatUsername}</p>
             </div>
             <div className="icons">
-              <img src={profile} alt="info" draggable="false" />
+              <img src={profileIcon} alt="info" draggable="false" onClick={toggleDetail} /> {/* Conditionally render the icon */}
             </div>
           </div>
 
