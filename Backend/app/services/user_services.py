@@ -55,6 +55,10 @@ class UserService:
         user = await self._repo.get_by_username(username)
         return success(user) if user else err("Пользователь не найден.")
 
+    async def get_by_id(self, id: uuid4):
+        user = await self._repo.get_by_id(id)
+        return success(user) if user else err("Пользователь не найден.")
+
     async def confirm_email(self, userId: str):
         return await self._repo.update_by_id(userId, is_mail_verified=True)
 

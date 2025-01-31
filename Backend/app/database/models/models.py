@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Date, ForeignKey, Column
+from sqlalchemy import Date, ForeignKey, Column, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -43,7 +43,7 @@ class Message(Base):
     senderId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), nullable=False)
     recipientId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), nullable=False)
     message: Mapped[str] = mapped_column(nullable=False)
-    datecreated: Mapped[Date] = mapped_column(Date, default=datetime.date.today)
+    datecreated: Mapped[DateTime] = mapped_column(DateTime, default=datetime.datetime.now)
 
     sender: Mapped["User"] = relationship("User", foreign_keys=[senderId], back_populates="messages_sent")
     recipient: Mapped["User"] = relationship("User", foreign_keys=[recipientId], back_populates="messages_received")

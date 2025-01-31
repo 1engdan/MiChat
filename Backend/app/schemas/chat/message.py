@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import date
+from datetime import datetime, time
 import uuid
 
 class _MessageBase(BaseModel):
@@ -14,6 +14,7 @@ class MessageRead(_MessageBase):
     senderId: uuid.UUID
     recipientId: uuid.UUID
     message: str
+    datecreated: datetime
 
 class Message(_MessageBase):
     iduser: uuid.UUID

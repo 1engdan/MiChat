@@ -35,7 +35,16 @@ async def get_profile(username: str, session: AsyncSession = Depends(get_session
         raise HTTPException(status_code=404, detail=result.error)
 
     profile = result.value
+
+    result1 = await UserService(session).get_by_username(username)
+
+    if not result1.success:
+        raise HTTPException(status_code=404, detail=result1.error)
+
+    user = result1.value
+
     profile_data = {
+        "userId": str(user.userId),  # Преобразование UUID в строку
         "username": username,
         "name": profile.name,
         "about_me": profile.about_me,

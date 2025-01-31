@@ -22,10 +22,7 @@ class ChatService:
         return success(result)
 
     async def send_message(self, user_id: UUID, message: MessageCreate):
-        recipient = await self._user_repo.get_by_username(message.recipient)
-        if not recipient:
-            return err("Пользователь не найден")
-        result = await self._chat_repository.send_message(user_id, message.content, recipient.userId)
+        result = await self._chat_repository.send_message(user_id, message.content, message.recipient)
         if not result:
             return err("Сообщение не отправлено")
         return success(result)
