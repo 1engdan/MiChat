@@ -32,6 +32,19 @@
       display: flex;
       align-items: center;
       gap: 10px;
+
+      img {
+        width: 20px; /* Ширина иконки */
+        height: 20px; /* Высота иконки */
+        border-radius: 5px; /* Скругление углов */
+        box-sizing: border-box;
+        padding: 1px;
+        cursor: pointer;
+      }
+      img:hover {
+        background-color: var(--background-color-1);
+        border: 1px solid var(--background-color-1);
+      }
     }
   }
 
@@ -70,9 +83,16 @@
       gap: 15px;
 
       img {
-        width: 20px;
-        height: 20px;
+        width: 20px; /* Ширина иконки */
+        height: 20px; /* Высота иконки */
+        border-radius: 5px; /* Скругление углов */
+        box-sizing: border-box;
+        padding: 1px;
         cursor: pointer;
+      }
+      img:hover {
+        background-color: var(--background-color-3);
+        border: 1px solid var(--background-color-3);
       }
     }
 
@@ -94,9 +114,16 @@
       gap: 15px;
 
       img {
-        width: 20px;
-        height: 20px;
+        width: 20px; /* Ширина иконки */
+        height: 20px; /* Высота иконки */
+        border-radius: 5px; /* Скругление углов */
+        box-sizing: border-box;
+        padding: 1px;
         cursor: pointer;
+      }
+      img:hover {
+        background-color: var(--background-color-3);
+        border: 1px solid var(--background-color-3);
       }
     }
   }

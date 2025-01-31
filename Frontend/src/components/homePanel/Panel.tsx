@@ -13,10 +13,15 @@ import LightOffChat from '../../assets/light-theme-icon/offChat.svg';
 import LightOffStg from '../../assets/light-theme-icon/offSettin.svg';
 import LightProfile from '../../assets/light-theme-icon/profile.svg';
 
+import Profile from '../profile/Profile'; // Import the Profile component
+import { fetchUsername } from '../../request/api'; // Import the fetchUsername function
+
 const Panel: React.FC = () => {
   const [isChatActive, setIsChatActive] = useState(false);
   const [isSettingsActive, setIsSettingsActive] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -61,6 +66,26 @@ const Panel: React.FC = () => {
     navigate('/settings');
   };
 
+  const handleProfileClick = async () => {
+    setIsProfileOpen(true);
+    // Extract user ID from token and set it to selectedChat
+    const token = localStorage.getItem('access_token'); // Assuming the token is stored in localStorage
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode the token to get user ID
+      const userId = decodedToken.userId;
+      try {
+        const username = await fetchUsername(userId);
+        setSelectedChat(username);
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    }
+  };
+
+  const handleProfileClose = () => {
+    setIsProfileOpen(false);
+  };
+
   const offChat = isDarkTheme ? DarkOffChat : LightOffChat;
   const offStg = isDarkTheme ? DarkOffStg : LightOffStg;
   const profile = isDarkTheme ? DarkProfile : LightProfile;
@@ -73,10 +98,11 @@ const Panel: React.FC = () => {
         onClick={handleChatClick}
         draggable="false"
       />
-      <img src={profile}
-      alt="profile"
-      draggable="false"
-      // onClick={handleProfileClick}
+      <img
+        src={profile}
+        alt="profile"
+        draggable="false"
+        onClick={handleProfileClick}
       />
       <img
         src={isSettingsActive ? OnStg : offStg}
@@ -84,6 +110,7 @@ const Panel: React.FC = () => {
         onClick={handleSettingsClick}
         draggable="false"
       />
+      <Profile isOpen={isProfileOpen} onClose={handleProfileClose} selectedChat={selectedChat} />
     </div>
   );
 };

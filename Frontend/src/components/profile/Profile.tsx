@@ -21,11 +21,18 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, selectedChat }) => {
           const profileData = await fetchProfile(selectedChat);
           setProfile(profileData);
 
-          const avatarBlob = await fetchImage(selectedChat);
-          const avatarUrl = URL.createObjectURL(avatarBlob);
-          setAvatarUrl(avatarUrl);
+          try {
+            const avatarBlob = await fetchImage(selectedChat);
+            const avatarUrl = URL.createObjectURL(avatarBlob);
+            setAvatarUrl(avatarUrl);
+          } catch (error) {
+            console.error('Error fetching avatar:', error);
+            setAvatarUrl(avatar);
+          }
         } catch (error) {
           console.error('Error fetching profile:', error);
+          setAvatarUrl(avatar);
+
         }
       }
     };

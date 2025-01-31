@@ -24,6 +24,16 @@ export const authorize = (data: { username: string; password: string }) => {
     return api.post<ApiResponse>('/a/authorize', formData);
 };
 
+export const fetchUsername = async (userId: string): Promise<string> => {
+  try {
+    const response = await api.get(`/profile/user/${userId}`); // Replace with your actual API endpoint
+    return response.data.username; // Assuming the API returns an object with a `username` field
+  } catch (error) {
+    console.error('Error fetching username:', error);
+    throw error;
+  }
+};
+
 export const checkUsername = (username: string) => api.get<ApiResponse>(`/a/check_username?username=${username}`);
 
 export const fetchChats = async (): Promise<Chat[]> => {
