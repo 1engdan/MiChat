@@ -10,7 +10,7 @@ const Chats: React.FC = () => {
   return (
     <div className="container-chats">
       <List setSelectedChat={setSelectedChat} />
-      <Chat selectedChat={selectedChat}/>
+      <Chat selectedChat={selectedChat} />
       {selectedChat && <Detail />}
     </div>
   );

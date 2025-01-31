@@ -18,8 +18,19 @@ const PrivateRoute = ({ element }: { element: ReactElement }): ReactElement => {
   return isAuthenticated() ? element : <Navigate to="/login" />;
 };
 
+// Компонент PublicRoute для защиты маршрутов логина и регистрации
+const PublicRoute = ({ element }: { element: ReactElement }): ReactElement => {
+  return !isAuthenticated() ? element : <Navigate to="/chats" />;
+};
+
 // Компонент NotFound для обработки несуществующих маршрутов
 const NotFound = (): ReactElement => {
+  return <Navigate to="/login" />;
+};
+
+// Компонент Logout для выхода из аккаунта
+const Logout = (): ReactElement => {
+  localStorage.removeItem('access_token');
   return <Navigate to="/login" />;
 };
 
@@ -40,10 +51,11 @@ const App = (): ReactElement => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login action={AuthType.LOGIN} />} />
-        <Route path="/register" element={<Login action={AuthType.REGISTER} />} />
+        <Route path="/login" element={<PublicRoute element={<Login action={AuthType.LOGIN} />} />} />
+        <Route path="/register" element={<PublicRoute element={<Login action={AuthType.REGISTER} />} />} />
         <Route path="/chats" element={<PrivateRoute element={<Chats />} />} />
         <Route path="/settings" element={<PrivateRoute element={<Settings />} />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

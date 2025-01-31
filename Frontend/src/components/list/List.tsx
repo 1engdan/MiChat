@@ -8,11 +8,11 @@ interface ListProps {
   setSelectedChat: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const List: React.FC<ListProps> = () => {
+const List: React.FC<ListProps> = ({ setSelectedChat }) => {
   return (
     <div className="list">
       <SearchBar />
-      <ChatList />
+      <ChatList setSelectedChat={setSelectedChat} />
       <Panel />
     </div>
   );

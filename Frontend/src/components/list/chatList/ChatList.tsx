@@ -7,7 +7,11 @@ import { fetchChats, fetchProfile, fetchImage } from '../../../request/api';
 import { Chat } from '../../../interface/Chat';
 import { Profile } from '../../../interface/Profile';
 
-const ChatList: React.FC = () => {
+interface ChatListProps {
+  setSelectedChat: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const ChatList: React.FC<ChatListProps> = ({ setSelectedChat }) => {
   const [selectedItem, setSelectedItem] = useState<string>('');
   const [items, setItems] = useState<{ id: string; avatar: string; name: string; }[]>([]);
 
@@ -20,7 +24,7 @@ const ChatList: React.FC = () => {
         // Получаем данные для каждого чата
         const itemsPromises = chats.map(async (chat) => {
           const profile: Profile = await fetchProfile(chat.username);
-          let avatar = localAvatar; // Default to local avatar
+          let avatar = localAvatar;
 
           try {
             const imageBlob: Blob = await fetchImage(chat.username);
@@ -48,6 +52,7 @@ const ChatList: React.FC = () => {
 
   const handleChatSelect = (id: string) => {
     setSelectedItem(id);
+    setSelectedChat(id); // Передаем выбранный чат в родительский компонент
   };
 
   return (

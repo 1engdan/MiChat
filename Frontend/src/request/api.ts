@@ -27,21 +27,26 @@ export const authorize = (data: { username: string; password: string }) => {
 export const checkUsername = (username: string) => api.get<ApiResponse>(`/a/check_username?username=${username}`);
 
 export const fetchChats = async (): Promise<Chat[]> => {
-    const response = await api.get<Chat[]>('chat/chats/all');
+    const response = await api.get<Chat[]>('/chat/chats/all');
     return response.data;
   };
-  
-  export const fetchProfile = async (username: string): Promise<Profile> => {
-    const response = await api.get(`profile/${username}`);
+
+export const fetchProfile = async (username: string): Promise<Profile> => {
+    const response = await api.get(`/profile/${username}`);
     return response.data.profile; // Extract the profile object from the response
   };
 
-  export const fetchImage = async (username: string): Promise<Blob> => {
-    const response = await api.get(`profile/${username}/image`, { responseType: 'blob' });
+export const fetchImage = async (username: string): Promise<Blob> => {
+    const response = await api.get(`/profile/${username}/image`, { responseType: 'blob' });
     return response.data;
   };
-  
-  export const fetchMessages = async (username: string): Promise<Message[]> => {
-    const response = await api.get<Message[]>(`chat/${username}`);
+
+export const fetchMessages = async (username: string): Promise<Message[]> => {
+    const response = await api.get<Message[]>(`/chat/${username}`);
+    return response.data;
+  };
+
+export const sendMessage = async (message: { recipient: string; content: string }): Promise<ApiResponse> => {
+    const response = await api.post<ApiResponse>('/chat/', message);
     return response.data;
   };
