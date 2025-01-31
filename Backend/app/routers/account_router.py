@@ -66,3 +66,12 @@ async def get_image(username: str, session: AsyncSession = Depends(get_session))
 
     image = result.value
     return StreamingResponse(io.BytesIO(image), media_type="image/jpeg")
+
+@account_router.get("/user/{userId}")
+async def get_username(userId: str, session: AsyncSession = Depends(get_session)):
+    result = await UserService(session).get_username(userId)
+
+    if not result.success:
+        raise HTTPException(status_code=404, detail=result.error)
+    
+    return result.value
