@@ -29,7 +29,7 @@ const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) =
   const [chatUsername, setChatUsername] = useState<string | null>(null);
   const [recipientId, setRecipientId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const endRef = useRef<HTMLDivElement>(null)
+  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const updateTheme = () => {
@@ -76,8 +76,9 @@ const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) =
   }, [selectedChat]);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({behavior:"smooth"})
-  })
+    endRef.current?.scrollIntoView({ behavior: "instant" });
+  });
+
   useEffect(() => {
     const connectWebSocket = () => {
       const accessToken = localStorage.getItem('access_token');
@@ -118,6 +119,37 @@ const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) =
       }
     };
   }, [selectedChat, userId, chatUsername]);
+
+  useEffect(() => {
+    const fetchNewMessages = async () => {
+      if (selectedChat) {
+        try {
+          const newMessages: Message[] = await fetchMessages(selectedChat);
+          const accessToken = localStorage.getItem('access_token');
+          const userId = accessToken ? JSON.parse(atob(accessToken.split('.')[1])).userId : null;
+
+          const formattedMessages = newMessages.map(message => ({
+            content: message.message,
+            time: new Date(message.datecreated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            sender: message.senderId === userId ? 'me' : 'other'
+          }));
+
+          setMessages(prevMessages => {
+            const messageIds = new Set(prevMessages.map(msg => msg.content));
+            return [...prevMessages, ...formattedMessages.filter(msg => !messageIds.has(msg.content))];
+          });
+        } catch (error) {
+          console.error('Error fetching new messages:', error);
+        }
+      }
+    };
+
+    const interval = setInterval(fetchNewMessages, 1000); // Fetch new messages every 5 seconds
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [selectedChat]);
 
   const sendMessage = async () => {
     if (recipientId && userId && inputRef.current) {
