@@ -43,7 +43,8 @@ async def get_profile(username: str, session: AsyncSession = Depends(get_session
         "username": username,
         "name": profile.name,
         "about_me": profile.about_me,
-        "birthday": profile.birthday.isoformat() if profile.birthday else None
+        "birthday": profile.birthday.isoformat() if profile.birthday else None,
+        "imgUrl": profile.imgUrl
     }
 
     return JSONResponse(content={"profile": profile_data})
