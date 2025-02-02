@@ -43,6 +43,7 @@ class Message(Base):
     senderId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), nullable=False)
     recipientId: Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.userId'), nullable=False)
     message: Mapped[str] = mapped_column(nullable=False)
+    fileUrl: Mapped[str] = mapped_column(nullable=True)
     datecreated: Mapped[DateTime] = mapped_column(DateTime, default=datetime.datetime.now)
 
     sender: Mapped["User"] = relationship("User", foreign_keys=[senderId], back_populates="messages_sent")
