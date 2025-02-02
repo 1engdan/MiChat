@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./settingList.css";
+import Modal from '../modal/Modal';
+import Button from '../../buttons/Button';
 
 interface SettingsListProps {
   selectedItem: string;
@@ -7,6 +9,22 @@ interface SettingsListProps {
 }
 
 const SettingsList: React.FC<SettingsListProps> = ({ selectedItem, setSelectedItem }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleLogout = () => {
+    setIsModalOpen(true);
+  };
+
+  const confirmLogout = () => {
+    localStorage.removeItem('access_token');
+    setIsModalOpen(false);
+    window.location.href = '/login';
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="settin-list">
       <div className="title-settin">
@@ -36,12 +54,26 @@ const SettingsList: React.FC<SettingsListProps> = ({ selectedItem, setSelectedIt
         <div className="list-logout">
           <div
             className={`item ${selectedItem === 'logout' ? 'selected' : ''}`}
-            onClick={() => setSelectedItem('logout')}
+            onClick={handleLogout}
           >
             <span>Выйти</span>
           </div>
         </div>
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="modal-header">
+          <p>Выход</p>
+        </div>
+        <div className="modal-body">
+          <div className='item-modal'>
+            <p>Вы точно хотите выйти?</p>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <Button onClick={closeModal} children="Отмена" className='negative modal-button' />
+          <Button onClick={confirmLogout} children="Да" className='positive modal-button' />
+        </div>
+      </Modal>
     </div>
   );
 };
