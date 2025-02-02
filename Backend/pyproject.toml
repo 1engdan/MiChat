@@ -22,6 +22,7 @@ pydantic = {extras = ["email"], version = "^2.10.4"}
 python-multipart = "^0.0.20"
 websocket = "^0.2.1"
 websockets = "^14.2"
+aiofiles = "^24.1.0"
 
 
 [build-system]
