@@ -1,0 +1,145 @@
+/* modalSearch.css */
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.content-search-modal {
+    background: var(--background-color-2);
+    padding: 15px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 355px;
+    max-height: 500px;
+    height: 190px; /* Изменено на auto для адаптивности */
+    position: relative;
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-color-default);
+    cursor: pointer;
+}
+
+.modal-header {
+    gap: 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal-header h2 {
+    color: var(--text-color-active);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.modal-header input {
+    width: 100%;
+    height: 30px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: var(--background-color-3);
+    border: none;
+    outline: none; /* Убираем стандартную обводку */
+    color: var(--text-color-active); /* Цвет текста */
+    font-size: 12px; /* Размер шрифта */
+}
+
+.modal-header input::placeholder {
+    color: var(--text-color-default); /* Цвет текста заполнителя */
+}
+
+.modal-header input:focus {
+    border: 1px solid var(--global-violet-color); /* Цвет границы при фокусе */
+    box-shadow: 0 0 5px rgba(115, 80, 176, 0.5); /* Тень при фокусе */
+}
+
+.modal-body {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-item-search {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для фона и цвета текста */
+    justify-content: space-between;
+}
+
+.items-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.items-profile img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.texts span {
+    font-size: 12px;
+    color: var(--text-color-active);
+}
+.texts p {
+    font-size: 12px;
+    color: var(--text-color-default);
+}
+.buttons-search {
+    background-color: var(--background-color-3);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 30px;
+    align-items: center;
+    padding: 0 15px;
+    border-radius: 5px;
+}
+
+.buttons-search img {
+    width: 20px; /* Ширина иконки */
+    height: 20px; /* Высота иконки */
+    box-sizing: border-box;
+    padding: 1px;
+    cursor: pointer;
+}
+
+.buttons-search img:hover {
+    background-color: var(--background-color-3);
+    border: 1px solid var(--background-color-3);
+}
+
+.buttons-search input {
+    width: 100%;
+    height: 30px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: var(--background-color-3);
+    border: none;
+    outline: none; /* Убираем стандартную обводку */
+    color: var(--text-color-active); /* Цвет текста */
+    font-size: 12px; /* Размер шрифта */
+}
+
+.buttons-search input::placeholder {
+    color: var(--text-color-default); /* Цвет текста заполнителя */
+}
