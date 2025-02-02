@@ -169,6 +169,7 @@ const Account: React.FC = () => {
             <p>{getModalText()}</p>
             <input
               type={modalContent === 'password' ? 'password' : 'text'}
+              autoComplete='off'
               value={modalContent === 'username' ? newUsername : modalContent === 'email' ? newEmail : newPassword}
               onChange={(e) => {
                 if (modalContent === 'username') setNewUsername(e.target.value);
