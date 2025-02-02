@@ -10,7 +10,16 @@ import { ReactElement } from 'react';
 // Функция для проверки аутентификации пользователя
 const isAuthenticated = (): boolean => {
   const accessToken = localStorage.getItem('access_token');
-  return !!accessToken; // Возвращает true, если токен существует
+  if (!accessToken) return false;
+
+  try {
+    const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decodedToken.exp > currentTime;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return false;
+  }
 };
 
 // Компонент PrivateRoute для защиты маршрутов
@@ -28,12 +37,6 @@ const NotFound = (): ReactElement => {
   return <Navigate to="/login" />;
 };
 
-// Компонент Logout для выхода из аккаунта
-const Logout = (): ReactElement => {
-  localStorage.removeItem('access_token');
-  return <Navigate to="/login" />;
-};
-
 const App = (): ReactElement => {
   useEffect(() => {
     const handleContextMenu = (e: Event): void => {
@@ -48,6 +51,21 @@ const App = (): ReactElement => {
     };
   }, []);
 
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      if (!isAuthenticated()) {
+        localStorage.removeItem('access_token');
+        window.location.href = '/login';
+      }
+    };
+
+    const interval = setInterval(checkTokenExpiration, 60000); // Check every minute
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -55,7 +73,6 @@ const App = (): ReactElement => {
         <Route path="/register" element={<PublicRoute element={<Login action={AuthType.REGISTER} />} />} />
         <Route path="/chats" element={<PrivateRoute element={<Chats />} />} />
         <Route path="/settings" element={<PrivateRoute element={<Settings />} />} />
-        <Route path="/logout" element={<Logout />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
