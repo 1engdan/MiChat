@@ -1,4 +1,6 @@
+import os
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from app.database.database import create_tables
 from app.routers.main_router import main_router
@@ -38,3 +40,5 @@ api.add_exception_handler(BadEmail, bad_email_exception_handler)
 @api.on_event("startup")
 async def startup_event():
     await create_tables()
+
+api.mount("/Uploads", StaticFiles(directory=f"{os.path.dirname(__file__)}/Uploads"), name="Uploads")
