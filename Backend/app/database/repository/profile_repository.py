@@ -24,7 +24,6 @@ class ProfileRepository(AbstractRepository):
                              userId: str,
                              name: Optional[str],
                              about_me: Optional[str],
-                             birthday: Optional[date],
                              ) -> Result[None]:
         query = (
             select(self.model)
@@ -48,8 +47,7 @@ class ProfileRepository(AbstractRepository):
         # Обновление профиля
         update_data = {
             "name": name,
-            "about_me": about_me,
-            "birthday": birthday
+            "about_me": about_me
         }
 
         updated_profile = await self.update(userId=userId, **update_data)

@@ -22,8 +22,7 @@ class ProfileService:
         return await self._repo.update_profile(
             userId,
             update_request.name,
-            update_request.about_me,
-            update_request.birthday
+            update_request.about_me
         )
 
     async def update_image(self, userId: str, image_request: ProfileImage):

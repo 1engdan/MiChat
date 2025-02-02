@@ -6,7 +6,6 @@ import uuid
 class _ProfileBase(BaseModel):
     name: Optional[str]
     about_me: Optional[str]
-    birthday: Optional[date]
 
 class ProfileCreate(_ProfileBase):
     pass

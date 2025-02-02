@@ -24,10 +24,9 @@ setting_router = APIRouter(
     tags=["Setting"]
 )
 
-@setting_router.put("/profile/upload")
-async def update_profile(updateRequest: UpdateProfile, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
-    logging.info(f"Received update request: {updateRequest}")
-    result = await ProfileService(session).update_profile(user.userId, updateRequest)
+@setting_router.put("/profile/update")
+async def update_profile(request: UpdateProfile, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    result = await ProfileService(session).update_profile(user.userId, request)
 
     if not result.success:
         raise HTTPException(
@@ -35,12 +34,7 @@ async def update_profile(updateRequest: UpdateProfile, user: User = Depends(get_
             detail=result.error
         )
 
-    # Возвращаем только текстовые данные профиля
-    return {
-        "name": result.value.name,
-        "about_me": result.value.about_me,
-        "birthday": result.value.birthday
-    }
+    return {"msg": "Profile успешно обновлен", "result": result.success}
 
 @setting_router.delete("/profile/delete")
 async def delete_account(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
