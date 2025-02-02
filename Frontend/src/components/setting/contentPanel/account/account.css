@@ -12,7 +12,7 @@
     align-items: center;
     gap: 10px;
 
-    .item {
+    .texts-item {
       gap: 5px;
       display: flex;
       flex-direction: column;
