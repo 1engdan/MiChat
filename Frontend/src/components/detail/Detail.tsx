@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './detail.css';
 import avatar from '../../assets/avatar.svg';
-import { fetchProfile, fetchImage } from '../../request/api';
+import { fetchProfile } from '../../request/api';
 import { Profile as ProfileInterface } from '../../interface/Profile';
 import Profile from '../profile/Profile'; // Import the Profile component
 
@@ -12,7 +12,6 @@ interface DetailProps {
 
 const Detail: React.FC<DetailProps> = ({ selectedChat }) => {
   const [profile, setProfile] = useState<ProfileInterface | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
@@ -22,9 +21,6 @@ const Detail: React.FC<DetailProps> = ({ selectedChat }) => {
           const profileData = await fetchProfile(selectedChat);
           setProfile(profileData);
 
-          const avatarBlob = await fetchImage(selectedChat);
-          const avatarUrl = URL.createObjectURL(avatarBlob);
-          setAvatarUrl(avatarUrl);
         } catch (error) {
           console.error('Error fetching profile:', error);
         }
@@ -58,7 +54,7 @@ const Detail: React.FC<DetailProps> = ({ selectedChat }) => {
     <div className="detail-container">
       <div className="header-detail"></div>
       <div className="avatar-container">
-        <img src={avatarUrl || avatar} alt="Avatar" />
+        <img src={profile.imgUrl ? `http://localhost:8000/${profile.imgUrl}` : avatar} alt="img" />
       </div>
       <div className="user-details">
         <h2>{profile.name}</h2>

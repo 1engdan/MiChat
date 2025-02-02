@@ -1,7 +1,7 @@
 import './profile.css';
 import avatar from '../../assets/avatar.svg';
 import React, { useEffect, useState } from 'react';
-import { fetchProfile, fetchImage } from '../../request/api';
+import { fetchProfile } from '../../request/api';
 import { Profile as ProfileInterface } from '../../interface/Profile';
 
 interface ProfileProps {
@@ -12,7 +12,6 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, selectedChat }) => {
   const [profile, setProfile] = useState<ProfileInterface | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -20,19 +19,8 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, selectedChat }) => {
         try {
           const profileData = await fetchProfile(selectedChat);
           setProfile(profileData);
-
-          try {
-            const avatarBlob = await fetchImage(selectedChat);
-            const avatarUrl = URL.createObjectURL(avatarBlob);
-            setAvatarUrl(avatarUrl);
-          } catch (error) {
-            console.error('Error fetching avatar:', error);
-            setAvatarUrl(avatar);
-          }
         } catch (error) {
           console.error('Error fetching profile:', error);
-          setAvatarUrl(avatar);
-
         }
       }
     };
@@ -61,7 +49,7 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, selectedChat }) => {
       <div className="profile-content" onClick={e => e.stopPropagation()}>
         <div className="header-detail"></div>
         <div className="avatar-container">
-          <img src={avatarUrl || avatar} alt="Avatar" />
+          <img src={profile?.imgUrl ? `http://localhost:8000/${profile.imgUrl}` : avatar} alt="img" />
         </div>
         <div className="user-details">
           {profile ? (
