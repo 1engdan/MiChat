@@ -29,6 +29,7 @@ const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) =
   const [chatUsername, setChatUsername] = useState<string | null>(null);
   const [recipientId, setRecipientId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -185,6 +186,12 @@ const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) =
     }
   };
 
+  const handleFileInputClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   const profileIcon = showDetail ? (isDarkTheme ? DarkOnProfile : LightOnProfile) : (isDarkTheme ? DarkOffProfile : LightOffProfile);
   const send = isDarkTheme ? DarkSend : LightSend;
   const file = isDarkTheme ? DarkFile : LightFile;
@@ -211,7 +218,7 @@ const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) =
 
           <div className="bottom">
             <div className="icons">
-              <img src={file} alt="" draggable="false" />
+              <img src={file} alt="" draggable="false" onClick={handleFileInputClick} />
             </div>
             <input
               type="text"

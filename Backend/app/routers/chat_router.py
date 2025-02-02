@@ -1,7 +1,8 @@
 import asyncio
 from typing import Dict, List
 from uuid import uuid4
-from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+import aiofiles
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.user_services import UserService
 from app.database.models.models import User
@@ -9,8 +10,6 @@ from app.security.jwtmanager import get_current_user
 from app.services.chat_services import ChatService
 from app.database.database import get_session
 from app.schemas.chat.message import MessageRead, MessageCreate
-import json
-import base64
 
 chat_router = APIRouter(
     prefix="/chat",
@@ -20,19 +19,15 @@ chat_router = APIRouter(
 @chat_router.get("/{username}", response_model=List[MessageRead])
 async def get_messages(username: str, current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await ChatService(session).get_messages_between_users(username, current_user.userId)
-
     if not result.success:
         raise HTTPException(status_code=400, detail=result.error)
-
     return result.value
 
 @chat_router.get("/chats/all")
 async def get_all_chats(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await ChatService(session).get_chat_users(user.userId)
-
     if not result.success:
         raise HTTPException(status_code=400, detail=result.error)
-
     return result.value
 
 @chat_router.post("/")

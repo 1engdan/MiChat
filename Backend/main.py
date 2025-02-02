@@ -1,17 +1,10 @@
 import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-
 from app.database.database import create_tables
 from app.routers.main_router import main_router
 from app.exc.email import BadEmail, bad_email_exception_handler
-
 from starlette.middleware.cors import CORSMiddleware
-
-from typing import Annotated
-from sqlalchemy.orm import Session
-from alembic.config import Config
-from alembic import command
 
 api = FastAPI(
     title="MiChatAPI",
@@ -19,14 +12,9 @@ api = FastAPI(
     version="v1",
 )
 
-origins = [
-    "http://localhost:3333",
-    "http://localhost:8000",
-]
-
 api.add_middleware (
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3333"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
