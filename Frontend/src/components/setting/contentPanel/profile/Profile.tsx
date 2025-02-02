@@ -1,36 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from '../../../buttons/Button';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import './profile.css';
+import { fetchProfile, updateProfile, fetchUsername, uploadImage, deleteImage } from '../../../../request/api';
 
 const Profile: React.FC = () => {
-  const [displayName, setDisplayName] = useState<string>('');
-  const [aboutMe, setAboutMe] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [name, setName] = useState<string>('');
+  const [about_me, setAboutMe] = useState<string>('');
   const [isChanged, setIsChanged] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const initialState = { displayName, aboutMe, selectedDate };
+  const initialState = { name, about_me };
   const [savedState, setSavedState] = useState(initialState);
 
   useEffect(() => {
-    if (displayName !== savedState.displayName || aboutMe !== savedState.aboutMe || selectedDate !== savedState.selectedDate) {
+    const fetchUserData = async () => {
+      try {
+        const accessToken = localStorage.getItem('access_token');
+        if (accessToken) {
+          const userId = accessToken ? JSON.parse(atob(accessToken.split('.')[1])).userId : null;
+          const username = await fetchUsername(userId);
+          setUsername(username);
+          const profile = await fetchProfile(username);
+          if (username == profile.name) {
+            setName('');
+          } else {
+            setName(profile.name);
+          }
+          setAboutMe(profile.about_me || '');
+          setSavedState({ name: profile.name || '', about_me: profile.about_me || ''});
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    if (name !== savedState.name || about_me !== savedState.about_me) {
       setIsChanged(true);
     } else {
       setIsChanged(false);
     }
-  }, [displayName, aboutMe, selectedDate, savedState]);
+  }, [name, about_me, savedState]);
 
-  const handleSave = () => {
-    setSavedState({ displayName, aboutMe, selectedDate });
-    setIsChanged(false);
+  const handleSave = async () => {
+    try {
+      await updateProfile({ name, about_me });
+      setSavedState({ name, about_me });
+      setIsChanged(false);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
   const handleCancel = () => {
-    setDisplayName(savedState.displayName);
-    setAboutMe(savedState.aboutMe);
-    setSelectedDate(savedState.selectedDate);
+    setName(savedState.name);
+    setAboutMe(savedState.about_me);
     setIsChanged(false);
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        await uploadImage(file);
+        alert('Изображение успешно загружено');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    }
+  };
+
+  const handleImageDelete = async () => {
+    try {
+      await deleteImage();
+      alert('Изображение успешно удалено');
+    } catch (error) {
+      console.error('Error deleting image:', error);
+    }
+  };
+
+  const handleChangeImageClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   return (
@@ -39,32 +95,31 @@ const Profile: React.FC = () => {
         <p>Отображаемое имя</p>
         <input
           type='text'
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder={username}
         />
       </div>
       <div className='item-profile'>
         <p>Обо мне</p>
         <input
           type='text'
-          value={aboutMe}
+          value={about_me}
           onChange={(e) => setAboutMe(e.target.value)}
         />
       </div>
       <div className='item-profile'>
-        <p>Дата рождения</p>
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          dateFormat="dd/MM/yyyy"
-          placeholderText="Выберите дату"
-        />
-      </div>
-      <div className='item-profile'>
         <p>Изображение профиля</p>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+        />
         <div className="buttons">
-          <Button onClick={() => {}} children="Смена изображение" className='positive'/>
-          <Button onClick={() => {}} children="Удалить изображение" className='negative'/>
+          <Button onClick={handleChangeImageClick} children="Смена изображение" className='positive'/>
+          <Button onClick={handleImageDelete} children="Удалить изображение" className='negative'/>
         </div>
       </div>
       {isChanged && (
