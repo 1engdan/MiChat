@@ -46,6 +46,7 @@ async def get_profile(username: str, session: AsyncSession = Depends(get_session
     profile_data = {
         "userId": str(user.userId),  # Преобразование UUID в строку
         "registdate": str(user.datacreated),
+        "email": user.email,
         "username": username,
         "name": profile.name,
         "about_me": profile.about_me,
