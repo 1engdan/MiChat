@@ -12,3 +12,6 @@ __pycache__/
 *.log
 
 nohup.out
+
+upload/DataChats/*
+upload/ProfileImg/*
