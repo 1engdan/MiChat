@@ -32,7 +32,7 @@ class Profile(Base):
     name: Mapped[str] = mapped_column(nullable=True)
     about_me: Mapped[str] = mapped_column(nullable=True)
     birthday: Mapped[Date] = mapped_column(Date, nullable=True)
-    image: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
+    imgUrl: Mapped[str] = mapped_column(nullable=True)
 
     user = relationship("User", back_populates="profile")
 
