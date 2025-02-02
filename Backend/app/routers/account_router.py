@@ -1,20 +1,13 @@
 from datetime import date
 import io
-import logging
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse, StreamingResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.models.models import Profile, User
-from app.security.jwtmanager import get_current_user, oauth2_scheme
-
 from app.services.profile_services import ProfileService
 from app.services.user_services import UserService
-
 from app.database.database import get_session
-
-from app.schemas.account.profile import UpdateProfile, ProfileImage
 
 account_router = APIRouter(
     prefix="/profile",
@@ -52,9 +45,6 @@ async def get_profile(username: str, session: AsyncSession = Depends(get_session
         "about_me": profile.about_me,
         "birthday": profile.birthday.isoformat() if profile.birthday else None
     }
-
-    if profile.image:
-        return JSONResponse(content={"profile": profile_data, "image_url": True})
 
     return JSONResponse(content={"profile": profile_data})
 

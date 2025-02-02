@@ -52,12 +52,6 @@ class ProfileRepository(AbstractRepository):
 
         updated_profile = await self.update(userId=userId, **update_data)
         return success(updated_profile)
-
-    async def update_image(self, userId: str, image: bytes) -> Result[None]:
-        query = update(self.model).where(self.model.iduser == userId).values(image=image).returning(self.model)
-        result = await self._session.execute(query)
-        await self._session.commit()
-        return success(result.scalars().first())
     
     async def delete_image(self, userId: str) -> Result[None]:
         query = update(self.model).where(self.model.iduser == userId).values(image=None).returning(self.model)
@@ -93,3 +87,13 @@ class ProfileRepository(AbstractRepository):
         result = await self._session.execute(query)
         await self._session.commit()
         return success(result.scalars().first())
+    
+    async def update_one(self, user_id: uuid4, **kwargs):
+        query = update(self.model).where(self.model.iduser == user_id).values(**kwargs).returning(self.model)
+        result = await self._session.execute(query)
+        await self._session.commit()
+        return result.scalars().first()
+    async def get_by_user_id(self, user_id: uuid4):
+        query = select(self.model).where(self.model.iduser == user_id)
+        result = await self._session.execute(query)
+        return result.scalars().first()

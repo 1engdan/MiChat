@@ -50,28 +50,23 @@ async def delete_account(user: User = Depends(get_current_user), session: AsyncS
 
 @setting_router.put("/profile/image/upload")
 async def upload_image(file: UploadFile = File(...), user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
-    contents = await file.read()
-    image_request = ProfileImage(image=contents)
-    result = await ProfileService(session).update_image(user.userId, image_request)
-
+    result = await ProfileService(session).update_image(user.userId, file)
     if not result.success:
         raise HTTPException(
             status_code=400,
             detail=result.error
         )
-
     return {"msg": "Изображение успешно загружено", "result": result.success}
+
 
 @setting_router.delete("/profile/image/delete")
 async def delete_image(user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     result = await ProfileService(session).delete_image(user.userId)
-
     if not result.success:
         raise HTTPException(
             status_code=400,
             detail=result.error
         )
-
     return {"msg": "Изображение успешно удалено", "result": result.success}
 
 @setting_router.put("/username/update")

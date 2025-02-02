@@ -20,4 +20,4 @@ class UpdateProfile(_ProfileBase):
     pass
 
 class ProfileImage(BaseModel):
-    image: Optional[bytes]
+    imgUrl: Optional[str]
