@@ -10,7 +10,19 @@
   .texts {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    
+    img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+
+    video {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+
     p {
       color: var(--text-color-default);
       margin: 0;
