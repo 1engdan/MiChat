@@ -12,9 +12,15 @@ api = FastAPI(
     version="v1",
 )
 
+# Настройка CORS
+origins = [
+    "https://api.michat.pw",
+    "https://michat.pw",
+]
+
 api.add_middleware (
     CORSMiddleware,
-    allow_origins=["https://michat.pw"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
