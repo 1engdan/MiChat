@@ -29,4 +29,9 @@ api.add_exception_handler(BadEmail, bad_email_exception_handler)
 async def startup_event():
     await create_tables()
 
+uploads_directory = os.path.join(os.path.dirname(__file__), "Uploads")
+
+if not os.path.exists(uploads_directory):
+    os.makedirs(uploads_directory)
+
 api.mount("/Uploads", StaticFiles(directory=f"{os.path.dirname(__file__)}/Uploads"), name="Uploads")
