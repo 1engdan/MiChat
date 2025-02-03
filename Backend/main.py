@@ -16,14 +16,12 @@ api = FastAPI(
 origins = [
     "https://api.michat.pw",
     "https://michat.pw",
-    "https://michat.pw/chats",
-    "https://michat.pw/settings",
-    "https://michat.pw/profile"
+    "http://localhost",
 ]
 
 api.add_middleware (
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
