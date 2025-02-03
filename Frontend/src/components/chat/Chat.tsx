@@ -85,7 +85,7 @@ const Chat: React.FC<ChatProps> = ({ selectedChat, toggleDetail, showDetail }) =
       const accessToken = localStorage.getItem('access_token');
       if (accessToken && chatUsername) {
         const userId = JSON.parse(atob(accessToken.split('.')[1])).userId;
-        const ws = new WebSocket(`ws://localhost:8000/chat/ws/${chatUsername}`);
+        const ws = new WebSocket(`wss://api.michat.pw/chat/ws/${chatUsername}`);
 
         ws.onopen = () => {
           console.log('WebSocket connected');

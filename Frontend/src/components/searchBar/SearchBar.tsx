@@ -12,7 +12,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   return (
     <div className="search-bar">
-      <input type="text" placeholder="Найти" onChange={handleInputChange} />
+      <input type="text" 
+             placeholder="Найти" 
+             onChange={handleInputChange}
+             autoComplete="off" />
     </div>
   );
 };

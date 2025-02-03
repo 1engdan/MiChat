@@ -121,8 +121,8 @@ const Account: React.FC = () => {
   const handleDeleteAccount = async () => {
     try {
       await deleteAccount({ current_password: currentPassword });
-      // Перенаправьте пользователя на страницу входа или выполните другие действия
       closeModal();
+      window.location.href = '/login';
     } catch (error) {
       console.error('Error deleting account:', error);
     }
@@ -183,6 +183,7 @@ const Account: React.FC = () => {
             <input
               type='password'
               value={currentPassword}
+              autoComplete="off"
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
           </div>
@@ -213,6 +214,7 @@ const Account: React.FC = () => {
             <input
               type='password'
               value={currentPassword}
+              autoComplete="off"
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
           </div>

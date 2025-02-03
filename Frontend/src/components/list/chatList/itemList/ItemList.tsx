@@ -18,7 +18,7 @@ const ItemList: React.FC<ItemListProps> = ({ id, avatar, name, selectedItem, han
       className={`item ${isSelected ? 'selected' : ''}`}
       onClick={() => handleChatSelect(id)}
     >
-      <img src={avatar ? `http://localhost:8000/${avatar}` : localAva} alt="img" />
+      <img src={avatar ? `https://api.michat.pw/${avatar}` : localAva} alt="img" />
       <div className="texts">
         <span>{name}</span>
       </div>

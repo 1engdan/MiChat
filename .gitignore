@@ -13,5 +13,5 @@ __pycache__/
 
 nohup.out
 
-Upload/DataChats/*
-Upload/ProfileImg/*
+Uploads/DataChats/*
+Uploads/ProfileImg/*

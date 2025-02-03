@@ -5,7 +5,7 @@ import { Message } from '../interface/Message';
 import { Profile } from '../interface/Profile';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000',  // URL вашего FastAPI приложения localhost:8000 api.michat.pw
+  baseURL: 'https://api.michat.pw',  // URL вашего FastAPI приложения localhost:8000 api.michat.pw
 });
 
 api.interceptors.request.use((config) => {

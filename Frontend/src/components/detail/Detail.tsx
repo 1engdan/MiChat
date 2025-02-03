@@ -54,7 +54,7 @@ const Detail: React.FC<DetailProps> = ({ selectedChat }) => {
     <div className="detail-container">
       <div className="header-detail"></div>
       <div className="avatar-container">
-        <img src={profile.imgUrl ? `http://localhost:8000/${profile.imgUrl}` : avatar} alt="img" />
+        <img src={profile.imgUrl ? `https://api.michat.pw/${profile.imgUrl}` : avatar} alt="img" />
       </div>
       <div className="user-details">
         <h2>{profile.name}</h2>

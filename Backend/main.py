@@ -14,7 +14,7 @@ api = FastAPI(
 
 api.add_middleware (
     CORSMiddleware,
-    allow_origins=["http://localhost:3333"],
+    allow_origins=["https://michat.pw"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
