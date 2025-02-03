@@ -16,15 +16,14 @@ api = FastAPI(
 origins = [
     "https://api.michat.pw",
     "https://michat.pw",
-    "http://localhost",
 ]
 
 api.add_middleware (
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 api.include_router(main_router)
