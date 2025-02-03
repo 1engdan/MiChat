@@ -16,6 +16,8 @@ api = FastAPI(
 origins = [
     "https://api.michat.pw",
     "https://michat.pw",
+    "http://localhost",
+    "http://localhost:3333",
 ]
 
 api.add_middleware (
