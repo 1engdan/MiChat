@@ -6,9 +6,10 @@ import Button from '../../buttons/Button';
 interface SettingsListProps {
   selectedItem: string;
   setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
+  searchValue: string;
 }
 
-const SettingsList: React.FC<SettingsListProps> = ({ selectedItem, setSelectedItem }) => {
+const SettingsList: React.FC<SettingsListProps> = ({ selectedItem, setSelectedItem, searchValue }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLogout = () => {
@@ -25,6 +26,17 @@ const SettingsList: React.FC<SettingsListProps> = ({ selectedItem, setSelectedIt
     setIsModalOpen(false);
   };
 
+  const settingsItems = [
+    { id: 'profile', name: 'Профиль' },
+    { id: 'account', name: 'Аккаунт' },
+    { id: 'theme', name: 'Внешний вид' },
+    { id: 'logout', name: 'Выйти' }
+  ];
+
+  const filteredItems = settingsItems.filter(item =>
+    item.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <div className="settin-list">
       <div className="title-settin">
@@ -32,32 +44,15 @@ const SettingsList: React.FC<SettingsListProps> = ({ selectedItem, setSelectedIt
       </div>
       <div className="list-items">
         <div className='list-setting'>
-          <div
-            className={`item ${selectedItem === 'profile' ? 'selected' : ''}`}
-            onClick={() => setSelectedItem('profile')}
-          >
-            <span>Профиль</span>
-          </div>
-          <div
-            className={`item ${selectedItem === 'account' ? 'selected' : ''}`}
-            onClick={() => setSelectedItem('account')}
-          >
-            <span>Аккаунт</span>
-          </div>
-          <div
-            className={`item ${selectedItem === 'theme' ? 'selected' : ''}`}
-            onClick={() => setSelectedItem('theme')}
-          >
-            <span>Внешний вид</span>
-          </div>
-        </div>
-        <div className="list-logout">
-          <div
-            className={`item ${selectedItem === 'logout' ? 'selected' : ''}`}
-            onClick={handleLogout}
-          >
-            <span>Выйти</span>
-          </div>
+          {filteredItems.map((item, index) => (
+            <div
+              key={index}
+              className={`item ${selectedItem === item.id ? 'selected' : ''}`}
+              onClick={() => item.id === 'logout' ? handleLogout() : setSelectedItem(item.id)}
+            >
+              <span>{item.name}</span>
+            </div>
+          ))}
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>

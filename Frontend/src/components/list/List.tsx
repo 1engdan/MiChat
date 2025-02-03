@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./list.css";
 import SearchBar from "../searchBar/SearchBar";
 import ChatList from "./chatList/ChatList";
@@ -9,10 +9,16 @@ interface ListProps {
 }
 
 const List: React.FC<ListProps> = ({ setSelectedChat }) => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+  };
+
   return (
     <div className="list">
-      <SearchBar />
-      <ChatList setSelectedChat={setSelectedChat} />
+      <SearchBar onSearch={handleSearch} />
+      <ChatList setSelectedChat={setSelectedChat} searchValue={searchValue} />
       <Panel />
     </div>
   );

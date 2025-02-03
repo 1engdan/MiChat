@@ -9,9 +9,10 @@ import ModalSearch from './ModalSearch/ModalSearch'; // Импортируем �
 
 interface ChatListProps {
     setSelectedChat: React.Dispatch<React.SetStateAction<string | null>>;
+    searchValue: string;
 }
 
-const ChatList: React.FC<ChatListProps> = ({ setSelectedChat }) => {
+const ChatList: React.FC<ChatListProps> = ({ setSelectedChat, searchValue }) => {
     const [selectedItem, setSelectedItem] = useState<string>('');
     const [items, setItems] = useState<{ id: string; avatar: string | null; name: string; }[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,6 +86,10 @@ const ChatList: React.FC<ChatListProps> = ({ setSelectedChat }) => {
         }
     };
 
+    const filteredItems = items.filter(item =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
     return (
         <div className="chatList">
             <div className="title-chat">
@@ -92,8 +97,8 @@ const ChatList: React.FC<ChatListProps> = ({ setSelectedChat }) => {
                 <img src={plus} alt="icon" onClick={() => setIsModalOpen(true)} />
             </div>
             <div className="list-items">
-                {items.length > 0 ? (
-                    items.map((item) => (
+                {filteredItems.length > 0 ? (
+                    filteredItems.map((item) => (
                         <ItemList
                             key={item.id}
                             id={item.id}

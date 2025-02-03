@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './leftPanel.css';
 import SearchBar from "../searchBar/SearchBar";
 import Panel from "../homePanel/Panel";
@@ -10,10 +10,16 @@ interface LeftPanelProps {
 }
 
 const LeftPanel: React.FC<LeftPanelProps> = ({ selectedItem, setSelectedItem }) => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+  };
+
   return (
     <div className='container-left-panel'>
-      <SearchBar />
-      <SettingsList selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
+      <SearchBar onSearch={handleSearch} />
+      <SettingsList selectedItem={selectedItem} setSelectedItem={setSelectedItem} searchValue={searchValue} />
       <Panel />
     </div>
   );
