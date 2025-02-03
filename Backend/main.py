@@ -14,10 +14,8 @@ api = FastAPI(
 
 # Настройка CORS
 origins = [
-    "https://api.michat.pw",
-    "https://michat.pw",
-    "http://localhost",
-    "http://localhost:3333",
+    "https://api.michat.pw/",
+    "https://michat.pw/",
 ]
 
 api.add_middleware (
