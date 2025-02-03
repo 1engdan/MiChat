@@ -17,7 +17,8 @@ origins = [
     "https://api.michat.pw",
     "https://michat.pw",
     "https://michat.pw/chats",
-    "https://michat.pw/settings"
+    "https://michat.pw/settings",
+    "https://michat.pw/profile"
 ]
 
 api.add_middleware (
