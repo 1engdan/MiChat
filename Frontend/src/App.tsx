@@ -70,6 +70,7 @@ const App = (): ReactElement => {
         <Route path="/register" element={<PublicRoute element={<Login action={AuthType.REGISTER} />} />} />
         <Route path="/chats" element={<PrivateRoute element={<Chats />} />} />
         <Route path="/settings" element={<PrivateRoute element={<Settings />} />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );
